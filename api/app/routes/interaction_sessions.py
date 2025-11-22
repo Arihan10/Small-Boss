@@ -92,20 +92,6 @@ async def start_interaction(request: StartInteractionRequest):
     return session_helper(new_session)
 
 
-@router.get("/", response_model=List[InteractionSession])
-async def list_sessions(active_only: bool = True):
-    """List interaction sessions."""
-    db = get_database()
-    sessions = []
-    
-    query = {"is_active": True} if active_only else {}
-    
-    async for session in db.interaction_sessions.find(query).sort("started_at", -1):
-        sessions.append(session_helper(session))
-    
-    return sessions
-
-
 @router.get("/{session_id}", response_model=InteractionSession)
 async def get_session(session_id: str):
     """Get a specific interaction session."""
@@ -119,63 +105,6 @@ async def get_session(session_id: str):
         raise HTTPException(status_code=404, detail="Session not found")
     
     return session_helper(session)
-
-
-@router.post("/{session_id}/action", response_model=InteractionSession)
-async def take_action(session_id: str, action: InteractionActionRequest):
-    """Take an action during an interaction."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(session_id):
-        raise HTTPException(status_code=400, detail="Invalid session ID")
-    
-    session = await db.interaction_sessions.find_one({"_id": ObjectId(session_id)})
-    if not session:
-        raise HTTPException(status_code=404, detail="Session not found")
-    
-    if not session.get("is_active"):
-        raise HTTPException(status_code=400, detail="Session is not active")
-    
-    # Verify it's this character's turn
-    if session["current_turn"] != action.character_id:
-        raise HTTPException(status_code=400, detail="Not your turn")
-    
-    # Get character name
-    char = await db.characters.find_one({"_id": ObjectId(action.character_id)})
-    if not char:
-        raise HTTPException(status_code=404, detail="Character not found")
-    
-    # Create message
-    message = Message(
-        character_id=action.character_id,
-        character_name=char["name"],
-        action=action.action,
-        content=action.content
-    )
-    
-    # Add message to session
-    await db.interaction_sessions.update_one(
-        {"_id": ObjectId(session_id)},
-        {"$push": {"messages": message.model_dump()}}
-    )
-    
-    # Handle "leave" action - end the interaction
-    if action.action == "leave":
-        await end_interaction(session_id, db)
-    else:
-        # Switch turn to next participant
-        current_idx = session["participants"].index(action.character_id)
-        next_idx = (current_idx + 1) % len(session["participants"])
-        next_turn = session["participants"][next_idx]
-        
-        await db.interaction_sessions.update_one(
-            {"_id": ObjectId(session_id)},
-            {"$set": {"current_turn": next_turn}}
-        )
-    
-    # Get updated session
-    updated_session = await db.interaction_sessions.find_one({"_id": ObjectId(session_id)})
-    return session_helper(updated_session)
 
 
 @router.post("/{session_id}/end", response_model=InteractionSession)

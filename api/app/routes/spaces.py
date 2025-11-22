@@ -23,26 +23,6 @@ def space_helper(space) -> dict:
     return None
 
 
-@router.post("/", response_model=Space, status_code=status.HTTP_201_CREATED)
-async def create_space(space: SpaceCreate):
-    """Create a new space."""
-    db = get_database()
-    
-    # Check if space with same name already exists
-    existing = await db.spaces.find_one({"name": space.name})
-    if existing:
-        raise HTTPException(status_code=400, detail="Space with this name already exists")
-    
-    space_dict = space.model_dump()
-    space_dict["characters_present"] = []
-    space_dict["activities_description"] = None
-    
-    result = await db.spaces.insert_one(space_dict)
-    new_space = await db.spaces.find_one({"_id": result.inserted_id})
-    
-    return space_helper(new_space)
-
-
 @router.get("/", response_model=List[Space])
 async def list_spaces():
     """List all spaces."""
@@ -71,32 +51,6 @@ async def get_space(space_id: str):
     return space_helper(space)
 
 
-@router.put("/{space_id}", response_model=Space)
-async def update_space(space_id: str, update: SpaceUpdate):
-    """Update a space's state."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(space_id):
-        raise HTTPException(status_code=400, detail="Invalid space ID format")
-    
-    # Only update fields that are provided
-    update_data = {k: v for k, v in update.model_dump().items() if v is not None}
-    
-    if not update_data:
-        raise HTTPException(status_code=400, detail="No update data provided")
-    
-    result = await db.spaces.update_one(
-        {"_id": ObjectId(space_id)},
-        {"$set": update_data}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Space not found")
-    
-    space = await db.spaces.find_one({"_id": ObjectId(space_id)})
-    return space_helper(space)
-
-
 @router.put("/{space_id}/characters", response_model=Space)
 async def update_characters_present(space_id: str, update: CharactersPresentUpdate):
     """Update the list of characters present in a space."""
@@ -117,26 +71,6 @@ async def update_characters_present(space_id: str, update: CharactersPresentUpda
     result = await db.spaces.update_one(
         {"_id": ObjectId(space_id)},
         {"$set": {"characters_present": update.characters_present}}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Space not found")
-    
-    space = await db.spaces.find_one({"_id": ObjectId(space_id)})
-    return space_helper(space)
-
-
-@router.put("/{space_id}/activities", response_model=Space)
-async def update_activities(space_id: str, update: ActivitiesUpdate):
-    """Update the activities description of a space."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(space_id):
-        raise HTTPException(status_code=400, detail="Invalid space ID format")
-    
-    result = await db.spaces.update_one(
-        {"_id": ObjectId(space_id)},
-        {"$set": {"activities_description": update.activities_description}}
     )
     
     if result.matched_count == 0:

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import connect_to_mongo, close_mongo_connection
-from app.routes import characters, relationships, spaces, interactions, interaction_sessions
+from app.routes import characters, relationships, spaces, interaction_sessions
 
 app = FastAPI(
     title="AI Life Simulation API",
@@ -35,7 +35,6 @@ async def shutdown_db_client():
 app.include_router(characters.router)
 app.include_router(relationships.router)
 app.include_router(spaces.router)
-app.include_router(interactions.router)
 app.include_router(interaction_sessions.router)
 
 

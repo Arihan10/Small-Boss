@@ -26,28 +26,6 @@ def character_helper(character) -> dict:
     return None
 
 
-@router.post("/", response_model=Character, status_code=status.HTTP_201_CREATED)
-async def create_character(character: CharacterCreate):
-    """Create a new character."""
-    db = get_database()
-    
-    character_dict = character.model_dump()
-    
-    # Set default needs if not provided
-    if "needs" not in character_dict or character_dict["needs"] is None:
-        character_dict["needs"] = Needs().model_dump()
-    
-    # Initialize empty lists
-    character_dict["action_log"] = []
-    character_dict["memory_log"] = []
-    character_dict["relationships"] = []
-    
-    result = await db.characters.insert_one(character_dict)
-    new_character = await db.characters.find_one({"_id": result.inserted_id})
-    
-    return character_helper(new_character)
-
-
 @router.get("/", response_model=List[Character])
 async def list_characters():
     """List all characters."""
@@ -73,108 +51,6 @@ async def get_character(character_id: str):
     if not character:
         raise HTTPException(status_code=404, detail="Character not found")
     
-    return character_helper(character)
-
-
-@router.put("/{character_id}", response_model=Character)
-async def update_character(character_id: str, update: CharacterUpdate):
-    """Update a character's state."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(character_id):
-        raise HTTPException(status_code=400, detail="Invalid character ID format")
-    
-    # Only update fields that are provided
-    update_data = {k: v for k, v in update.model_dump().items() if v is not None}
-    
-    if not update_data:
-        raise HTTPException(status_code=400, detail="No update data provided")
-    
-    result = await db.characters.update_one(
-        {"_id": ObjectId(character_id)},
-        {"$set": update_data}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Character not found")
-    
-    character = await db.characters.find_one({"_id": ObjectId(character_id)})
-    return character_helper(character)
-
-
-@router.delete("/{character_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_character(character_id: str):
-    """Delete a character."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(character_id):
-        raise HTTPException(status_code=400, detail="Invalid character ID format")
-    
-    result = await db.characters.delete_one({"_id": ObjectId(character_id)})
-    
-    if result.deleted_count == 0:
-        raise HTTPException(status_code=404, detail="Character not found")
-    
-    return None
-
-
-@router.put("/{character_id}/desire", response_model=Character)
-async def update_desire(character_id: str, desire_update: DesireUpdate):
-    """Update a character's current desire/intention."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(character_id):
-        raise HTTPException(status_code=400, detail="Invalid character ID format")
-    
-    result = await db.characters.update_one(
-        {"_id": ObjectId(character_id)},
-        {"$set": {"current_desire": desire_update.current_desire}}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Character not found")
-    
-    character = await db.characters.find_one({"_id": ObjectId(character_id)})
-    return character_helper(character)
-
-
-@router.post("/{character_id}/action-log", response_model=Character)
-async def add_action_log(character_id: str, action: ActionLogEntry):
-    """Add an action to a character's action log."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(character_id):
-        raise HTTPException(status_code=400, detail="Invalid character ID format")
-    
-    result = await db.characters.update_one(
-        {"_id": ObjectId(character_id)},
-        {"$push": {"action_log": action.model_dump()}}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Character not found")
-    
-    character = await db.characters.find_one({"_id": ObjectId(character_id)})
-    return character_helper(character)
-
-
-@router.post("/{character_id}/memory-log", response_model=Character)
-async def add_memory_log(character_id: str, memory: MemoryLogEntry):
-    """Add a memory to a character's memory log."""
-    db = get_database()
-    
-    if not ObjectId.is_valid(character_id):
-        raise HTTPException(status_code=400, detail="Invalid character ID format")
-    
-    result = await db.characters.update_one(
-        {"_id": ObjectId(character_id)},
-        {"$push": {"memory_log": memory.model_dump()}}
-    )
-    
-    if result.matched_count == 0:
-        raise HTTPException(status_code=404, detail="Character not found")
-    
-    character = await db.characters.find_one({"_id": ObjectId(character_id)})
     return character_helper(character)
 
 

@@ -113,41 +113,32 @@ This will create:
 
 ## API Endpoints
 
-### Characters
+### Characters (Unity-Focused)
 
-- `POST /characters` - Create a new character
 - `GET /characters` - List all characters
 - `GET /characters/{id}` - Get character by ID
-- `PUT /characters/{id}` - Update character state
-- `DELETE /characters/{id}` - Delete character
-- `PUT /characters/{id}/desire` - Update character's current desire
-- `POST /characters/{id}/action-log` - Add action to character's log
-- `POST /characters/{id}/memory-log` - Add memory to character's log
+- `POST /characters/{id}/use/{object}` - Use object (AI flavor text with emoji)
 
 ### Relationships
 
-- `POST /relationships` - Create relationship between two characters
-- `GET /relationships` - List all relationships
-- `GET /relationships/{id}` - Get specific relationship
-- `GET /characters/{id}/relationships` - Get all relationships FROM a character (outgoing)
-- `GET /characters/{id}/incoming` - Get all relationships TO a character (incoming)
-- `PUT /relationships/{id}` - Update relationship
-- `POST /relationships/{id}/interactions` - Add interaction summary
+- `GET /characters/{id}/relationships` - Get outgoing relationships
+- `GET /characters/{id}/incoming` - Get incoming relationships
 
 ### Spaces
 
-- `POST /spaces` - Create a new space
 - `GET /spaces` - List all spaces
 - `GET /spaces/{id}` - Get space by ID
-- `PUT /spaces/{id}` - Update space state
-- `PUT /spaces/{id}/characters` - Update characters present in space
-- `PUT /spaces/{id}/activities` - Update activities description
+- `PUT /spaces/{id}/characters` - Update characters present
+- `PUT /spaces/{id}/generate-activities` - AI-generate scene description
 
-### Interactions
+### Interaction Sessions
 
-- `POST /interactions` - Log a new interaction
-- `GET /interactions` - List all interactions
-- `GET /interactions/character/{id}` - Get interactions for specific character
+- `POST /interaction-sessions/` - Start conversation
+- `GET /interaction-sessions/{id}` - Get session state
+- `POST /interaction-sessions/{id}/advance` - AI-advance conversation
+- `POST /interaction-sessions/{id}/end` - End conversation
+
+> **📖 See [API_ENDPOINTS.md](API_ENDPOINTS.md) for complete Unity integration guide with examples**
 
 ## Data Models
 
