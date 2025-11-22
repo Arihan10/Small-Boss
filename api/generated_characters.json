@@ -1,0 +1,1202 @@
+{
+  "metadata": {
+    "generated_at": "2025-11-22T11:31:37.192681",
+    "setting": "medieval town",
+    "num_characters": 20,
+    "model": "claude-sonnet-4-20250514"
+  },
+  "characters": [
+    {
+      "name": "Margery Blackwood",
+      "age": 52,
+      "race": "Black",
+      "gender": "Female",
+      "occupation": "Innkeeper",
+      "background": "A former traveling merchant who fell in love with Thomas and settled in Millbrook twenty years ago. She runs the Sleeping Dragon Inn and serves as the town's emotional center, knowing everyone's business and mediating disputes.",
+      "personality_traits": [
+        "hospitable",
+        "sharp business sense",
+        "protective",
+        "natural leader",
+        "stubborn"
+      ],
+      "appearance": {
+        "hair": 12,
+        "shoes": 4,
+        "bottom": 2,
+        "top": 4
+      },
+      "relationships": [
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Deeply loves her husband of twenty-eight years",
+          "relationship_score": 95
+        },
+        {
+          "target_name": "Elena Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Proud of her eldest daughter but worries about her finding happiness",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves her son but constantly worries about his reckless nature",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Adores her youngest daughter but fears losing her to adventure",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Yuki Tanaka",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend who shares daily tea, recipes, and town gossip",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Sarai bint-Rashid",
+          "relationship_type": "Friend",
+          "relationship_summary": "Serves as a mother figure to the orphaned herbalist",
+          "relationship_score": 75
+        }
+      ],
+      "needs": {
+        "happiness": 70,
+        "energy": 65,
+        "hunger": 60,
+        "hygiene": 80
+      }
+    },
+    {
+      "name": "Thomas Blackwood",
+      "age": 54,
+      "race": "White",
+      "gender": "Male",
+      "occupation": "Blacksmith",
+      "background": "Born in Millbrook and inherited the forge from his father. Married to Margery for twenty-eight years, he's known for his gentle nature despite his strength and secretly writes poetry for his wife.",
+      "personality_traits": [
+        "patient",
+        "methodical",
+        "gentle",
+        "romantic",
+        "melancholic"
+      ],
+      "appearance": {
+        "hair": 8,
+        "shoes": 6,
+        "bottom": 0,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Margery Blackwood",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Completely devoted to his wife, writes her secret poetry",
+          "relationship_score": 95
+        },
+        {
+          "target_name": "Elena Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Proud of his talented daughter",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Teaching him blacksmithing but fears he lacks patience for it",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Adores his youngest daughter",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Wilhelm Adler",
+          "relationship_type": "Professional",
+          "relationship_summary": "Works closely together despite constant bickering about methods",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Father Dmitri Volkov",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys their weekly chess games and philosophical arguments",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 75,
+        "energy": 60,
+        "hunger": 55,
+        "hygiene": 65
+      }
+    },
+    {
+      "name": "Elena Blackwood",
+      "age": 28,
+      "race": "Black",
+      "gender": "Female",
+      "occupation": "Tailor",
+      "background": "The eldest Blackwood daughter who runs her own tailor shop. She's been secretly in love with Sarai for three years but lacks the courage to express her feelings, instead showing care through embroidered details in Sarai's clothing.",
+      "personality_traits": [
+        "creative",
+        "perfectionist",
+        "sensitive",
+        "anxious",
+        "longing"
+      ],
+      "appearance": {
+        "hair": 13,
+        "shoes": 4,
+        "bottom": 2,
+        "top": 3
+      },
+      "relationships": [
+        {
+          "target_name": "Margery Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves her mother but feels pressure about marriage",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Close to her gentle father",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Frustrated by his immaturity but cares for him",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Adores her little sister who follows her around",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Sarai bint-Rashid",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Secretly deeply in love but too afraid to confess",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Mei Chen",
+          "relationship_type": "Friend",
+          "relationship_summary": "Close friend who shares her love of learning",
+          "relationship_score": 75
+        }
+      ],
+      "needs": {
+        "happiness": 45,
+        "energy": 70,
+        "hunger": 65,
+        "hygiene": 85
+      }
+    },
+    {
+      "name": "Marcus Blackwood",
+      "age": 16,
+      "race": "Black",
+      "gender": "Male",
+      "occupation": "Student",
+      "background": "The middle Blackwood child who feels overshadowed by his siblings. He dreams of adventure beyond Millbrook and has an intense crush on Isabella Cortez while constantly getting into trouble with his best friend Johan.",
+      "personality_traits": [
+        "impulsive",
+        "charming",
+        "restless",
+        "brave",
+        "insecure"
+      ],
+      "appearance": {
+        "hair": 4,
+        "shoes": 1,
+        "bottom": 3,
+        "top": 7
+      },
+      "relationships": [
+        {
+          "target_name": "Margery Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves his mother but feels she worries too much",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Respects his father but finds blacksmithing boring",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Elena Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Feels judged by his perfect sister",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Protective of his little sister despite feeling overshadowed",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Johan Nakamura",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend and partner in trouble",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Isabella Cortez",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Has an intense crush and makes a fool of himself trying to impress her",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Garrett O'Sullivan",
+          "relationship_type": "Friend",
+          "relationship_summary": "Admires the guard who teaches him sword-fighting",
+          "relationship_score": 75
+        }
+      ],
+      "needs": {
+        "happiness": 55,
+        "energy": 80,
+        "hunger": 70,
+        "hygiene": 50
+      }
+    },
+    {
+      "name": "Sophie Blackwood",
+      "age": 8,
+      "race": "Black",
+      "gender": "Female",
+      "occupation": "Student",
+      "background": "The youngest Blackwood child who is curious and fearless. She's the best student in school, explores the forest with her friend Ezra, and is the only person who knows Theodore can't read.",
+      "personality_traits": [
+        "curious",
+        "fearless",
+        "imaginative",
+        "mischievous",
+        "wise"
+      ],
+      "appearance": {
+        "hair": 4,
+        "shoes": 1,
+        "bottom": 2,
+        "top": 6
+      },
+      "relationships": [
+        {
+          "target_name": "Margery Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Adores her protective mother",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves her gentle father",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Elena Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Idolizes her big sister and follows her around",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Family",
+          "relationship_summary": "Looks up to her adventurous brother",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Ezra Cohen",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend and exploration partner",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Nadya Volkov",
+          "relationship_type": "Friend",
+          "relationship_summary": "Idolizes the strong lumberjack",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Theodore MacLeish",
+          "relationship_type": "Friend",
+          "relationship_summary": "Feels sorry for him and wants to help him read",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 85,
+        "energy": 90,
+        "hunger": 75,
+        "hygiene": 45
+      }
+    },
+    {
+      "name": "Sarai bint-Rashid",
+      "age": 31,
+      "race": "Middle Eastern",
+      "gender": "Female",
+      "occupation": "Herbalist",
+      "background": "Orphaned at fifteen when her merchant parents died in a storm, she was taken in by the previous herbalist. She lives alone surrounded by gardens, emotionally guarded but slowly questioning her self-imposed loneliness.",
+      "personality_traits": [
+        "knowledgeable",
+        "observant",
+        "independent",
+        "guarded",
+        "haunted"
+      ],
+      "appearance": {
+        "hair": 13,
+        "shoes": 4,
+        "bottom": 2,
+        "top": 2
+      },
+      "relationships": [
+        {
+          "target_name": "Elena Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Views her as a kind friend, oblivious to her romantic feelings",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Margery Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Grateful for the maternal care from the innkeeper",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Father Dmitri Volkov",
+          "relationship_type": "Professional",
+          "relationship_summary": "Works closely with on healing and finds wisdom in their discussions",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Wilhelm Adler",
+          "relationship_type": "Professional",
+          "relationship_summary": "Argues with constantly but secretly respects his knowledge",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Patiently teaches the curious child about plants",
+          "relationship_score": 80
+        }
+      ],
+      "needs": {
+        "happiness": 50,
+        "energy": 65,
+        "hunger": 60,
+        "hygiene": 75
+      }
+    },
+    {
+      "name": "Father Dmitri Volkov",
+      "age": 63,
+      "race": "White",
+      "gender": "Male",
+      "occupation": "Priest",
+      "background": "Came to Millbrook thirty years ago fleeing a troubled past. He's an unconventional priest who provides spiritual guidance while secretly questioning his own faith, finding meaning in serving others.",
+      "personality_traits": [
+        "wise",
+        "unconventional",
+        "intellectual",
+        "kind",
+        "questioning"
+      ],
+      "appearance": {
+        "hair": 8,
+        "shoes": 4,
+        "bottom": 0,
+        "top": 9
+      },
+      "relationships": [
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys their weekly chess games and philosophical debates",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Rafael Cortez",
+          "relationship_type": "Friend",
+          "relationship_summary": "Closest friend despite different worldviews",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Tries to mentor the restless youth",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Mei Chen",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys philosophical discussions about education",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Sarai bint-Rashid",
+          "relationship_type": "Professional",
+          "relationship_summary": "Works with her on healing and finds purpose in helping others",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Nadya Volkov",
+          "relationship_type": "Family",
+          "relationship_summary": "Cares for his independent niece",
+          "relationship_score": 80
+        }
+      ],
+      "needs": {
+        "happiness": 60,
+        "energy": 55,
+        "hunger": 65,
+        "hygiene": 70
+      }
+    },
+    {
+      "name": "Yuki Tanaka",
+      "age": 47,
+      "race": "Asian",
+      "gender": "Female",
+      "occupation": "Baker",
+      "background": "Arrived fifteen years ago with her late husband and built a successful bakery. Now widowed, she's Margery's best friend and has recently developed feelings for Theodore while still processing her grief.",
+      "personality_traits": [
+        "generous",
+        "hardworking",
+        "optimistic",
+        "stubborn",
+        "matchmaker"
+      ],
+      "appearance": {
+        "hair": 12,
+        "shoes": 4,
+        "bottom": 2,
+        "top": 4
+      },
+      "relationships": [
+        {
+          "target_name": "Margery Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend who shares daily tea and town gossip",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Kenji Tanaka",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves her son but worries about his dreams conflicting with duty",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Theodore MacLeish",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Developing feelings but unsure if ready for love again",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Amara Okafor",
+          "relationship_type": "Rival",
+          "relationship_summary": "Friendly rivalry over bread recipes",
+          "relationship_score": 60
+        }
+      ],
+      "needs": {
+        "happiness": 65,
+        "energy": 70,
+        "hunger": 55,
+        "hygiene": 75
+      }
+    },
+    {
+      "name": "Kenji Tanaka",
+      "age": 17,
+      "race": "Asian",
+      "gender": "Male",
+      "occupation": "Baker",
+      "background": "Works in his mother's bakery but dreams of pursuing art. He's torn between supporting his widowed mother and following his passion, while maintaining a close friendship with Isabella.",
+      "personality_traits": [
+        "responsible",
+        "artistic",
+        "ambitious",
+        "romantic",
+        "conflicted"
+      ],
+      "appearance": {
+        "hair": 6,
+        "shoes": 4,
+        "bottom": 3,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Yuki Tanaka",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves his mother but feels torn between duty and dreams",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Isabella Cortez",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend who understands his dreams and ambitions",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Mei Chen",
+          "relationship_type": "Friend",
+          "relationship_summary": "Grateful for her encouragement of his artistic talents",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Rival",
+          "relationship_summary": "Sees him as competition for Isabella's attention",
+          "relationship_score": 45
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys teaching her to draw",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 55,
+        "energy": 75,
+        "hunger": 60,
+        "hygiene": 70
+      }
+    },
+    {
+      "name": "Isabella Cortez",
+      "age": 17,
+      "race": "Hispanic",
+      "gender": "Female",
+      "occupation": "Merchant",
+      "background": "Rafael's ambitious daughter being trained to take over the family business. She dreams of expanding beyond Millbrook and finds Marcus's crush annoying while valuing her friendship with Kenji.",
+      "personality_traits": [
+        "ambitious",
+        "clever",
+        "pragmatic",
+        "kind",
+        "hungry for more"
+      ],
+      "appearance": {
+        "hair": 13,
+        "shoes": 4,
+        "bottom": 2,
+        "top": 3
+      },
+      "relationships": [
+        {
+          "target_name": "Rafael Cortez",
+          "relationship_type": "Family",
+          "relationship_summary": "Close to her father but sometimes feels stifled by his protection",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Kenji Tanaka",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend who sees past her merchant facade",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Finds his crush annoying but thinks he might have potential",
+          "relationship_score": 50
+        },
+        {
+          "target_name": "Nadya Volkov",
+          "relationship_type": "Professional",
+          "relationship_summary": "Learning from her about business and negotiation",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 65,
+        "energy": 75,
+        "hunger": 60,
+        "hygiene": 85
+      }
+    },
+    {
+      "name": "Rafael Cortez",
+      "age": 49,
+      "race": "Hispanic",
+      "gender": "Male",
+      "occupation": "Merchant",
+      "background": "A successful merchant who built a trading network and was among Millbrook's first settlers. Widowed and protective of Isabella, he's central to the town's economy and close friends with Father Dmitri.",
+      "personality_traits": [
+        "intelligent",
+        "strategic",
+        "protective",
+        "fair",
+        "lonely"
+      ],
+      "appearance": {
+        "hair": 6,
+        "shoes": 4,
+        "bottom": 0,
+        "top": 10
+      },
+      "relationships": [
+        {
+          "target_name": "Isabella Cortez",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves his daughter deeply but fears losing her",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Father Dmitri Volkov",
+          "relationship_type": "Friend",
+          "relationship_summary": "Closest friend who shares philosophical discussions",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Professional",
+          "relationship_summary": "Good business relationship and poker partner",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Nadya Volkov",
+          "relationship_type": "Professional",
+          "relationship_summary": "Respects her business acumen",
+          "relationship_score": 65
+        }
+      ],
+      "needs": {
+        "happiness": 60,
+        "energy": 65,
+        "hunger": 60,
+        "hygiene": 80
+      }
+    },
+    {
+      "name": "Garrett O'Sullivan",
+      "age": 34,
+      "race": "White",
+      "gender": "Male",
+      "occupation": "Guard",
+      "background": "Came to Millbrook eight years ago after failing to protect his previous lord's family from raiders. He carries crushing guilt but has found purpose protecting the town and training Marcus.",
+      "personality_traits": [
+        "dutiful",
+        "honorable",
+        "haunted",
+        "protective",
+        "gentle"
+      ],
+      "appearance": {
+        "hair": 8,
+        "shoes": 6,
+        "bottom": 0,
+        "top": 1
+      },
+      "relationships": [
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Protective of the youth he's training in swordplay",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Nadya Volkov",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Has feelings for her but believes his past makes him unworthy",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Mei Chen",
+          "relationship_type": "Friend",
+          "relationship_summary": "Protective of the teacher, walks her home nightly",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Respects the blacksmith and his family",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 45,
+        "energy": 70,
+        "hunger": 65,
+        "hygiene": 75
+      }
+    },
+    {
+      "name": "Nadya Volkov",
+      "age": 29,
+      "race": "White",
+      "gender": "Female",
+      "occupation": "Lumberjack",
+      "background": "Father Dmitri's niece who came to Millbrook five years ago to escape her controlling family. She works the forest with her horses and has built a successful lumber business while maintaining her independence.",
+      "personality_traits": [
+        "strong",
+        "confident",
+        "cheerful",
+        "independent",
+        "direct"
+      ],
+      "appearance": {
+        "hair": 13,
+        "shoes": 6,
+        "bottom": 3,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Father Dmitri Volkov",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves her uncle who helped her escape",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Isabella Cortez",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys mentoring the ambitious girl",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Amused and touched by the girl's admiration",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Garrett O'Sullivan",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Finds him attractive but wary of his brooding intensity",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Amara Okafor",
+          "relationship_type": "Friend",
+          "relationship_summary": "Bonds with over being strong independent women",
+          "relationship_score": 75
+        }
+      ],
+      "needs": {
+        "happiness": 75,
+        "energy": 80,
+        "hunger": 65,
+        "hygiene": 60
+      }
+    },
+    {
+      "name": "Mei Chen",
+      "age": 26,
+      "race": "Asian",
+      "gender": "Female",
+      "occupation": "Teacher",
+      "background": "The most educated person in town who arrived two years ago to establish a proper school. She's idealistic about education but feels culturally isolated, finding friendship with Elena and mentoring talented students.",
+      "personality_traits": [
+        "patient",
+        "idealistic",
+        "educated",
+        "isolated",
+        "determined"
+      ],
+      "appearance": {
+        "hair": 12,
+        "shoes": 4,
+        "bottom": 2,
+        "top": 3
+      },
+      "relationships": [
+        {
+          "target_name": "Elena Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Bonds with over shared love of learning",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Kenji Tanaka",
+          "relationship_type": "Friend",
+          "relationship_summary": "Encourages his artistic talent and potential",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Professional",
+          "relationship_summary": "Proud of her star pupil's abilities",
+          "relationship_score": 80
+        },
+        {
+          "target_name": "Garrett O'Sullivan",
+          "relationship_type": "Friend",
+          "relationship_summary": "Appreciates his protection but finds his intensity unsettling",
+          "relationship_score": 55
+        },
+        {
+          "target_name": "Father Dmitri Volkov",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys their philosophical discussions about education",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 60,
+        "energy": 70,
+        "hunger": 65,
+        "hygiene": 85
+      }
+    },
+    {
+      "name": "Wilhelm Adler",
+      "age": 58,
+      "race": "White",
+      "gender": "Male",
+      "occupation": "Carpenter",
+      "background": "Born in Millbrook and one of its oldest residents, he's a widower who lost his wife and baby twenty years ago. He's skilled but argumentative, secretly compassionate, and has taken Johan as an apprentice.",
+      "personality_traits": [
+        "skilled",
+        "argumentative",
+        "compassionate",
+        "scientific",
+        "resistant to change"
+      ],
+      "appearance": {
+        "hair": 8,
+        "shoes": 6,
+        "bottom": 0,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Professional",
+          "relationship_summary": "Works closely together despite constant bickering",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Sarai bint-Rashid",
+          "relationship_type": "Professional",
+          "relationship_summary": "Argues with about medicine but secretly respects her",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Gruffly fond of her scientific curiosity",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Johan Nakamura",
+          "relationship_type": "Professional",
+          "relationship_summary": "Teaching carpentry and sees his potential",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Hiroshi Nakamura",
+          "relationship_type": "Friend",
+          "relationship_summary": "Weekly poker partner despite philosophical differences",
+          "relationship_score": 60
+        }
+      ],
+      "needs": {
+        "happiness": 50,
+        "energy": 65,
+        "hunger": 60,
+        "hygiene": 65
+      }
+    },
+    {
+      "name": "Amara Okafor",
+      "age": 43,
+      "race": "Black",
+      "gender": "Female",
+      "occupation": "Farmer",
+      "background": "Built her farm from nothing after fleeing an abusive marriage fifteen years ago. She's fiercely independent, essential to the town's food supply, and extremely wary of remarrying despite Theodore's courtship.",
+      "personality_traits": [
+        "hardworking",
+        "proud",
+        "independent",
+        "community-minded",
+        "grieving"
+      ],
+      "appearance": {
+        "hair": 0,
+        "shoes": 6,
+        "bottom": 3,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Daniel Okafor",
+          "relationship_type": "Family",
+          "relationship_summary": "Protective of her hardworking son",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Grace Okafor",
+          "relationship_type": "Family",
+          "relationship_summary": "Wants to give her daughter the stable childhood she never had",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Nadya Volkov",
+          "relationship_type": "Friend",
+          "relationship_summary": "Bonds over being strong independent women",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Yuki Tanaka",
+          "relationship_type": "Rival",
+          "relationship_summary": "Friendly rivalry over bread recipes",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Theodore MacLeish",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Finds him kind but extremely wary of remarrying",
+          "relationship_score": 45
+        }
+      ],
+      "needs": {
+        "happiness": 55,
+        "energy": 70,
+        "hunger": 60,
+        "hygiene": 70
+      }
+    },
+    {
+      "name": "Daniel Okafor",
+      "age": 12,
+      "race": "Black",
+      "gender": "Male",
+      "occupation": "Student",
+      "background": "A hardworking boy who helps on his mother's farm and has taken on extra responsibility since his father left. He's fascinated by herbalism and enjoys learning from both Sarai and Theodore.",
+      "personality_traits": [
+        "enthusiastic",
+        "helpful",
+        "nature-smart",
+        "impulsive",
+        "responsible"
+      ],
+      "appearance": {
+        "hair": 3,
+        "shoes": 1,
+        "bottom": 1,
+        "top": 0
+      },
+      "relationships": [
+        {
+          "target_name": "Amara Okafor",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves his strong mother and wants to help her",
+          "relationship_score": 90
+        },
+        {
+          "target_name": "Grace Okafor",
+          "relationship_type": "Family",
+          "relationship_summary": "Protective of his little sister",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Ezra Cohen",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend and exploration partner, feels protective of",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Sarai bint-Rashid",
+          "relationship_type": "Friend",
+          "relationship_summary": "Fascinated by her knowledge and brings her plants",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Theodore MacLeish",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys his stories and patient teaching",
+          "relationship_score": 70
+        }
+      ],
+      "needs": {
+        "happiness": 70,
+        "energy": 75,
+        "hunger": 70,
+        "hygiene": 55
+      }
+    },
+    {
+      "name": "Hiroshi Nakamura",
+      "age": 61,
+      "race": "Asian",
+      "gender": "Male",
+      "occupation": "Miller",
+      "background": "Has run Millbrook's mill for thirty years and is married to the ailing Hana. He's traditional and business-minded but secretly proud of Johan's carpentry skills while worried about his wife's health.",
+      "personality_traits": [
+        "business-minded",
+        "traditional",
+        "stern but fair",
+        "worried",
+        "struggling with aging"
+      ],
+      "appearance": {
+        "hair": 8,
+        "shoes": 6,
+        "bottom": 0,
+        "top": 3
+      },
+      "relationships": [
+        {
+          "target_name": "Johan Nakamura",
+          "relationship_type": "Family",
+          "relationship_summary": "Secretly proud of his son's carpentry skills",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Amara Okafor",
+          "relationship_type": "Professional",
+          "relationship_summary": "Important business relationship processing her grain",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Thomas Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Weekly poker partner",
+          "relationship_score": 65
+        },
+        {
+          "target_name": "Wilhelm Adler",
+          "relationship_type": "Friend",
+          "relationship_summary": "Poker partner despite philosophical differences",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Sarai bint-Rashid",
+          "relationship_type": "Professional",
+          "relationship_summary": "Consults about wife's health despite skepticism",
+          "relationship_score": 55
+        }
+      ],
+      "needs": {
+        "happiness": 45,
+        "energy": 55,
+        "hunger": 60,
+        "hygiene": 70
+      }
+    },
+    {
+      "name": "Johan Nakamura",
+      "age": 15,
+      "race": "Asian",
+      "gender": "Male",
+      "occupation": "Student",
+      "background": "A thoughtful teenager who attends school and apprentices with Wilhelm in carpentry. He's Marcus's best friend and partner in minor troublemaking, with dreams of building something remarkable.",
+      "personality_traits": [
+        "intelligent",
+        "practical",
+        "dutiful but restless",
+        "loyal",
+        "creative"
+      ],
+      "appearance": {
+        "hair": 6,
+        "shoes": 6,
+        "bottom": 3,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Hiroshi Nakamura",
+          "relationship_type": "Family",
+          "relationship_summary": "Loves his father but finds the mill suffocating",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Marcus Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Best friend and troublemaking partner",
+          "relationship_score": 85
+        },
+        {
+          "target_name": "Wilhelm Adler",
+          "relationship_type": "Professional",
+          "relationship_summary": "Grateful for his teaching and one of the few who can make him laugh",
+          "relationship_score": 75
+        },
+        {
+          "target_name": "Grace Okafor",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Has a shy crush but would never admit it",
+          "relationship_score": 65
+        }
+      ],
+      "needs": {
+        "happiness": 65,
+        "energy": 75,
+        "hunger": 65,
+        "hygiene": 60
+      }
+    },
+    {
+      "name": "Theodore MacLeish",
+      "age": 67,
+      "race": "White",
+      "gender": "Male",
+      "occupation": "Fisherman",
+      "background": "Millbrook's weathered fisherman who supplies fresh catch to the town. He's a widower who never had children, secretly ashamed of his illiteracy, and torn between romantic interests in Yuki and Amara.",
+      "personality_traits": [
+        "patient",
+        "kind",
+        "storytelling",
+        "ashamed",
+        "hopeful"
+      ],
+      "appearance": {
+        "hair": 8,
+        "shoes": 6,
+        "bottom": 0,
+        "top": 5
+      },
+      "relationships": [
+        {
+          "target_name": "Daniel Okafor",
+          "relationship_type": "Friend",
+          "relationship_summary": "Enjoys teaching the eager boy fishing techniques",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Sophie Blackwood",
+          "relationship_type": "Friend",
+          "relationship_summary": "Embarrassed but touched that she knows his secret",
+          "relationship_score": 60
+        },
+        {
+          "target_name": "Yuki Tanaka",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Drawn to her warmth and shared experience of loss",
+          "relationship_score": 70
+        },
+        {
+          "target_name": "Amara Okafor",
+          "relationship_type": "Romantic",
+          "relationship_summary": "Finds her strength attractive but senses her wariness",
+          "relationship_score": 50
+        }
+      ],
+      "needs": {
+        "happiness": 50,
+        "energy": 45,
+        "hunger": 60,
+        "hygiene": 55
+      }
+    }
+  ]
+}
