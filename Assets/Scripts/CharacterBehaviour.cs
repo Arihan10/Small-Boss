@@ -1,6 +1,8 @@
 using System;
+using System.Collections; // Required for Coroutines
 using UnityEngine;
 using UnityEngine.AI;
+using TMPro; // Required for TextMeshPro
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class CharacterBehaviour : MonoBehaviour
@@ -16,6 +18,11 @@ public class CharacterBehaviour : MonoBehaviour
 
     [SerializeField] GameObject testObj;
 
+    [Header("Text Bubble Settings")]
+    [SerializeField] private GameObject textBubbleRoot; // Assign the parent object of the bubble
+    [SerializeField] private TextMeshProUGUI textBubbleText; // Assign the text component
+    private Coroutine currentBubbleRoutine;
+
     // Optional callback when destination is reached
     public event Action OnReachedDestination;
 
@@ -28,8 +35,72 @@ public class CharacterBehaviour : MonoBehaviour
 
     void Awake()
     {
-    agent = GetComponent<NavMeshAgent>();
-    animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+
+        // Initialize bubble state
+        if (textBubbleRoot != null)
+        {
+            textBubbleRoot.SetActive(false);
+            textBubbleRoot.transform.localScale = Vector3.zero;
+        }
+    }
+
+    /// <summary>
+    /// Shows a text bubble with a pop-up animation, waits for duration, then pops down.
+    /// </summary>
+    /// <param name="text">The text to display.</param>
+    /// <param name="duration">Time in seconds before disappearing.</param>
+    public void Say(string text, float duration = 3f)
+    {
+        if (textBubbleRoot == null || textBubbleText == null)
+        {
+            Debug.LogWarning("Text Bubble references missing on CharacterBehaviour!");
+            return;
+        }
+
+        // Stop any existing bubble animation to reset
+        if (currentBubbleRoutine != null) StopCoroutine(currentBubbleRoutine);
+        
+        currentBubbleRoutine = StartCoroutine(AnimateBubbleRoutine(text, duration));
+    }
+
+    private IEnumerator AnimateBubbleRoutine(string text, float duration)
+    {
+        textBubbleText.text = text;
+        textBubbleRoot.SetActive(true);
+
+        // Animate In (Scale 0 to 1)
+        float timer = 0f;
+        float animDuration = 0.25f;
+        
+        while (timer < animDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / animDuration;
+            // SmoothStep creates a nice ease-in/ease-out curve
+            float scale = Mathf.SmoothStep(0f, 1f, t); 
+            textBubbleRoot.transform.localScale = Vector3.one * scale;
+            yield return null;
+        }
+        textBubbleRoot.transform.localScale = Vector3.one;
+
+        // Wait for the reading duration
+        yield return new WaitForSeconds(duration);
+
+        // Animate Out (Scale 1 to 0)
+        timer = 0f;
+        while (timer < animDuration)
+        {
+            timer += Time.deltaTime;
+            float t = timer / animDuration;
+            float scale = Mathf.SmoothStep(1f, 0f, t);
+            textBubbleRoot.transform.localScale = Vector3.one * scale;
+            yield return null;
+        }
+        
+        textBubbleRoot.transform.localScale = Vector3.zero;
+        textBubbleRoot.SetActive(false);
     }
 
     /// <summary>
@@ -193,5 +264,6 @@ public class CharacterBehaviour : MonoBehaviour
 
     void Start() {
         // MoveTo(testObj.transform.position, false);
+        Say("HELLO! I am an alien", 3);
     }
 }
