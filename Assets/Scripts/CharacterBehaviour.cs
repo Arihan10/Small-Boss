@@ -14,6 +14,8 @@ public class CharacterBehaviour : MonoBehaviour
     // whether the character is currently running to a destination
     private bool isRunning = false;
 
+    [SerializeField] GameObject testObj;
+
     // Optional callback when destination is reached
     public event Action OnReachedDestination;
 
@@ -54,7 +56,7 @@ public class CharacterBehaviour : MonoBehaviour
         {
             isRunning = true;
             isWalking = false;
-            agent.speed = 5f;
+            agent.speed = 3f;
             animator?.SetBool("isRunning", true);
             animator?.SetBool("isWalking", false);
         }
@@ -62,7 +64,7 @@ public class CharacterBehaviour : MonoBehaviour
         {
             isWalking = true;
             isRunning = false;
-            agent.speed = 3f;
+            agent.speed = 1.8f;
             animator?.SetBool("isWalking", true);
             animator?.SetBool("isRunning", false);
         }
@@ -187,5 +189,9 @@ public class CharacterBehaviour : MonoBehaviour
             animator?.SetBool("isKissing", false);
         }
         animator?.SetBool("isSexing", isSexing);
+    }
+
+    void Start() {
+        // MoveTo(testObj.transform.position, false);
     }
 }
