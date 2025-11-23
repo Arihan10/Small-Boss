@@ -233,12 +233,14 @@ Generate the flavor text:"""
         self,
         space_name: str,
         characters: list,
-        available_objects: list = None
+        available_objects: list = None,
+        current_description: str = None
     ) -> str:
         """
         Generate space context description from characters present.
         Only describes what they're ACTUALLY doing based on current_desire and recent actions.
         Unity provides available_objects for this space.
+        Updates current_description minimally if provided.
         """
         
         if not characters:
@@ -275,11 +277,17 @@ Generate the flavor text:"""
         objects_context = ""
         if available_objects:
             objects_context = f"\nAvailable objects in this space: {', '.join(available_objects)}"
+            
+        # Add previous description context
+        prev_desc_context = ""
+        if current_description:
+            prev_desc_context = f"\nPREVIOUS DESCRIPTION: {current_description}\n\nINSTRUCTION: Update the previous description ONLY if character activities have changed. Maintain consistency. If nothing changed, return the exact same string."
         
         prompt = f"""Location: {space_name}{objects_context}
 
-Characters present:
+Characters present and their current states:
 {context}
+{prev_desc_context}
 
 Generate a FACTUAL, LITERAL description of what each person is doing OR wanting to do.
 

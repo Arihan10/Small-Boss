@@ -14,6 +14,7 @@ class SpaceContextRequest(BaseModel):
     space_name: str
     characters_present: List[str]  # Full names of characters
     available_objects: List[str] = []  # Objects in this space (Unity provides)
+    description: Optional[str] = None  # Previous description to update minimally
 
 
 class SpaceContextResponse(BaseModel):
@@ -62,7 +63,8 @@ async def generate_space_context(request: SpaceContextRequest):
         description = await llm.generate_space_context_from_characters(
             space_name=request.space_name,
             characters=characters_in_space,
-            available_objects=request.available_objects
+            available_objects=request.available_objects,
+            current_description=request.description
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"LLM generation failed: {str(e)}")

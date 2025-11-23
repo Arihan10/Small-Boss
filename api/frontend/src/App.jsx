@@ -185,7 +185,8 @@ function App() {
         const ctxRes = await axios.post(`${API}/context/generate-space-context`, {
           space_name: currentSpace,
           characters_present: charsInSpace.map(c => c.name),
-          available_objects: space?.objects || []
+          available_objects: space?.objects || [],
+          description: spaceDescription // Pass existing description
         })
         spaceDescription = ctxRes.data.description
         if (spaceDescription) {
