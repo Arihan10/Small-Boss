@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     database_name: str = "ai_life_sim"
     
     # Optional API keys for future LLM integration
+    cerebras_api_key: Optional[str] = None
     anthropic_api_key: Optional[str] = None
     gemini_api_key: Optional[str] = None
     openai_api_key: Optional[str] = None

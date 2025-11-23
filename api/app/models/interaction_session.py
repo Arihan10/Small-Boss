@@ -22,7 +22,6 @@ class InteractionSession(BaseModel):
     participant_names: List[str]  # Character names for display
     interaction_type: str  # "dialog", "fight", "romance", etc.
     messages: List[Message] = Field(default_factory=list)
-    current_turn: str  # Character ID whose turn it is
     started_at: datetime = Field(default_factory=datetime.utcnow)
     ended_at: Optional[datetime] = None
     is_active: bool = True
