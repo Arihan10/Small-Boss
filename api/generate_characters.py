@@ -1,9 +1,10 @@
 """
 Character Generation Script
-Uses Claude 4.5 Sonnet to generate a medieval town with 20 characters.
+Uses Claude 4.5 Sonnet to generate a small rural town with 20 characters.
+Map includes: Park, Pool, Soccer Field, Farmer Market, Campfire, School, Farm, Library, Hospital, and Houses.
 Two-shot approach:
 1. Generate background stories for all characters
-2. Parse and populate relationships, demographics, appearances
+2. Parse and populate relationships, demographics, appearances, and locations
 """
 
 import os
@@ -17,7 +18,7 @@ load_dotenv()
 
 # Configuration
 NUM_CHARACTERS = 20
-SETTING = "medieval town"
+SETTING = "small rural town with park, pool, soccer field, farmer market, school, farm, library, and hospital"
 OUTPUT_FILE = "generated_characters.json"
 
 # Asset mappings for reference
@@ -45,10 +46,25 @@ TOPS = {
     8: "green hoodie", 9: "shirt with tie", 10: "suit top"
 }
 
-MEDIEVAL_JOBS = [
-    "Farmer", "Blacksmith", "Teacher", "Student", "Lumberjack",
-    "Baker", "Innkeeper", "Guard", "Merchant", "Priest",
-    "Herbalist", "Tailor", "Miller", "Carpenter", "Fisherman"
+JOBS_AND_LOCATIONS = {
+    "School": ["Teacher", "Student", "Principal"],
+    "Hospital": ["Nurse", "Doctor"],
+    "Farm": ["Farmer", "Farmhand"],
+    "Library": ["Librarian", "Library Assistant"],
+    "Farmer Market": ["Market Vendor", "Produce Seller"],
+    "Pool": ["Lifeguard", "Pool Attendant"],
+    "Soccer Field": ["Soccer Coach", "Athlete"],
+    "Park": ["Park Ranger", "Groundskeeper"],
+    "Houses": ["Retired", "Homemaker", "Remote Worker", "Chef", "Artist"],
+    "General": ["Town Mayor", "Handyman", "Delivery Driver"]
+}
+
+ALL_JOBS = [job for jobs in JOBS_AND_LOCATIONS.values() for job in jobs]
+
+MAP_LOCATIONS = [
+    "Park", "Pool", "Soccer Field", "Farmer Market", "Campfire Area",
+    "School", "Farm", "Library", "Hospital", "House 1", "House 2",
+    "House 3", "House 4", "House 5"
 ]
 
 
@@ -60,25 +76,60 @@ async def generate_character_backgrounds(client: AsyncAnthropic) -> str:
     
     print("Shot 1: Generating character backgrounds...")
     
+    locations_desc = "\n".join([f"- {loc}: {', '.join(jobs)}" for loc, jobs in JOBS_AND_LOCATIONS.items()])
+    
     prompt = f"""You are a creative writer designing characters for a {SETTING} with {NUM_CHARACTERS} people.
 
-Create {NUM_CHARACTERS} unique characters with rich, interconnected backgrounds. This is a close-knit medieval community.
+Create {NUM_CHARACTERS} unique characters with rich, interconnected backgrounds. This is a close-knit rural community.
+
+THE TOWN MAP INCLUDES:
+- Park (peaceful area for gatherings)
+- Pool (community swimming pool)
+- Soccer Field (sports and recreation)
+- Farmer Market stands (local produce and goods)
+- Campfire area (community gathering spot)
+- School (middle building - education center)
+- Farm (back building with cows and chickens)
+- Library (left building - knowledge center)
+- Hospital/Nurse station (rightmost building with beds and IV stands)
+- Several residential houses
+
+JOB DISTRIBUTION BY LOCATION:
+{locations_desc}
 
 Requirements:
-- Include families (parents, children, siblings, spouses)
+- Include families (parents, children, siblings, spouses) - but families should have INTERNAL CONFLICTS
 - Mix of ages (children 5-17, adults 18-60, elders 60+)
-- Various occupations: {', '.join(MEDIEVAL_JOBS)}
+- Various occupations from the list above
 - Complex relationships (friends, rivals, family, romantic interests)
-- Diverse personalities and motivations
 - Diverse ethnicities (realistic human races - White, Black, Asian, Hispanic, Middle Eastern, etc.)
 - Each person should have meaningful connections to at least 2-3 others
+- IMPORTANT: CREATE DRAMA AND TENSION:
+  * Include love triangles, unrequited love, secret crushes
+  * Create rivalries, grudges, old conflicts that still simmer
+  * Add family drama (estranged siblings, disappointed parents, rebellious children)
+  * Include workplace tensions, professional jealousies
+  * Create conflicting goals and competing interests between characters
+  * Add secrets, betrayals, and unresolved issues
+- IMPORTANT: Each character needs clear BEHAVIORAL TRAITS that guide their decisions:
+  * Ambition level (low/medium/high)
+  * Confrontational tendency (low/medium/high)
+  * Sociability (low/medium/high)
+  * Core life motivation (what they want: family, love, power, knowledge, safety, adventure, etc.)
+  * Other decision-guiding traits (protective, curious, cautious, impulsive, etc.)
 
 For EACH of the {NUM_CHARACTERS} characters, write a background paragraph that includes:
-1. Their name, age, and occupation
-2. Key personality traits (3-5 traits)
-3. Their family connections
-4. Important relationships with other townspeople
-5. A brief life story/what drives them
+1. Their name, age, and occupation (from the jobs list above)
+2. Where they work/spend time (specific location on the map)
+3. Their core personality dimensions (ambition level, confrontational tendency)
+4. What they want in life (core motivations like "take care of family", "find love", "gain respect", "escape poverty")
+5. Their family connections AND family tensions/conflicts
+6. Important relationships with other townspeople - emphasize DRAMA:
+   - Romantic interests (unrequited love, love triangles, complicated attractions)
+   - Rivalries and antagonistic relationships
+   - Betrayals, grudges, or past conflicts
+   - Professional jealousies or competing ambitions
+7. A brief life story with emphasis on conflicts and tensions
 
 Format each character as:
 ---
@@ -86,7 +137,7 @@ CHARACTER [number]
 [Background paragraph]
 ---
 
-Make the town feel ALIVE with interconnected stories, conflicts, friendships, and family dynamics."""
+Make the town feel like a DRAMATIC SOAP OPERA with interconnected stories, LOTS of conflicts, romantic tensions, family drama, rivalries, and complicated dynamics. This should feel like a reality TV show where everyone has beef with someone!"""
 
     response = await client.messages.create(
         model="claude-sonnet-4-5-20250929",
@@ -120,6 +171,8 @@ Bottom (0-5): {', '.join(f"{k}={v}" for k, v in BOTTOMS.items())}
 Top (0-10): {', '.join(f"{k}={v}" for k, v in TOPS.items())}
 """
     
+    jobs_list = ', '.join(ALL_JOBS)
+    
     prompt = f"""Parse the following character backgrounds into structured JSON data.
 
 {backgrounds}
@@ -132,9 +185,16 @@ For EACH character, create a JSON object with:
   "age": <number>,
   "race": "White/Black/Asian/Hispanic/Middle Eastern/Native American/Mixed/etc (realistic human ethnicities)",
   "gender": "Male/Female/Non-binary",
-  "occupation": "occupation from: {', '.join(MEDIEVAL_JOBS)}",
+  "occupation": "occupation from: {jobs_list}",
   "background": "Their full background story (2-3 sentences)",
-  "personality_traits": ["trait1", "trait2", "trait3", ...],
+  "personality_traits": [
+    "ambition: low/medium/high",
+    "confrontational: low/medium/high",
+    "sociable: low/medium/high",
+    "core_motivation: [specific goal like 'take care of family', 'find love', 'gain respect', 'become wealthy', 'seek adventure', 'protect others', etc.]",
+    "[other relevant behavioral traits that will guide their decisions]",
+    ...
+  ],
   "appearance": {{
     "hair": <0-15>,
     "shoes": <0-6>,
@@ -158,16 +218,37 @@ For EACH character, create a JSON object with:
 }}
 
 IMPORTANT:
-1. Choose appearance codes that fit medieval setting (e.g., worker boots for farmers, suits for merchants)
-2. Create relationships BETWEEN the characters (use their names)
-3. Ensure family relationships are bidirectional (if A is B's parent, B is A's child)
-4. Relationship scores: 80-100 (very positive), 40-80 (positive), 0-40 (neutral), -40-0 (tense), -100--40 (hostile)
-5. Set reasonable initial needs (most people around 50-70)
+1. Choose appearance codes that fit rural/modern setting (e.g., worker boots for farmers, casual wear for students)
+2. PERSONALITY TRAITS must be DECISION-GUIDING, not just descriptive. Include:
+   - "ambition: low/medium/high" (how driven are they?)
+   - "confrontational: low/medium/high" (do they avoid or seek conflict?)
+   - "sociable: low/medium/high" (do they seek company or solitude?)
+   - "core_motivation: [specific goal]" (what do they want in life?)
+   - Additional behavioral traits that affect decisions (protective, curious, cautious, impulsive, loyal, etc.)
+3. Create relationships BETWEEN the characters (use their names) - EMPHASIZE DRAMA:
+   - Each character should have 4-6 relationships minimum
+   - AT LEAST 30-40% of relationships should be negative/tense (scores below 20)
+   - Include love triangles (Person A loves Person B who loves Person C)
+   - Include rivalries and antagonistic relationships (negative scores)
+   - Include complicated family dynamics (even family can have low scores due to conflict)
+   - Use relationship_type "Romantic" for crushes, attractions, or complicated feelings
+   - Use relationship_type "Rival" for antagonistic relationships
+4. Ensure family relationships are bidirectional (if A is B's parent, B is A's child) - but scores can differ!
+5. Relationship scores: 
+   - 80-100 (deep love/very positive) 
+   - 40-80 (positive/friendly)
+   - 20-40 (neutral/awkward)
+   - 0-20 (tense/uncomfortable)
+   - -20-0 (dislike/conflict)
+   - -40--20 (strong dislike/rivalry)
+   - -100--40 (hatred/hostility)
+   USE THE FULL RANGE! Don't just make everyone friendly.
+6. Set reasonable initial needs (most people around 50-70)
 
 Return ONLY a valid JSON array of {NUM_CHARACTERS} character objects. No markdown, no explanation."""
 
     response = await client.messages.create(
-        model="claude-sonnet-4-20250514",
+        model="claude-sonnet-4-5-20250929",
         max_tokens=16000,
         messages=[{
             "role": "user",
@@ -203,8 +284,9 @@ async def main():
     
     client = AsyncAnthropic(api_key=api_key)
     
-    print(f"=== Medieval Town Character Generator ===")
+    print(f"=== Rural Town Character Generator ===")
     print(f"Generating {NUM_CHARACTERS} characters for {SETTING}")
+    print(f"Map Locations: {', '.join(MAP_LOCATIONS[:5])}...")
     print(f"Using Claude 4.5 Sonnet\n")
     
     # Shot 1: Generate backgrounds
@@ -219,7 +301,7 @@ async def main():
             "generated_at": datetime.utcnow().isoformat(),
             "setting": SETTING,
             "num_characters": len(characters),
-            "model": "claude-sonnet-4-20250514"
+            "model": "claude-sonnet-4-5-20250929"
         },
         "characters": characters
     }

@@ -5,9 +5,7 @@ class InteractionState(str, Enum):
     """Enum for the current state of interaction between characters."""
     
     NONE = "none"
-    TALKING = "talking"
-    KISSING = "kissing"
+    DIALOG = "dialog"
     FIGHTING = "fighting"
-    ROMANCING = "romancing"
-    USING_OBJECT = "using_object"
+    ROMANCE = "romance"
 

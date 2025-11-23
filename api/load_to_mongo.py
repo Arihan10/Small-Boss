@@ -42,13 +42,11 @@ async def load_characters_to_mongo():
     print("\n=== Clearing existing data ===")
     chars_deleted = await db.characters.delete_many({})
     rels_deleted = await db.relationships.delete_many({})
-    spaces_deleted = await db.spaces.delete_many({})
-    interactions_deleted = await db.interactions.delete_many({})
+    sessions_deleted = await db.interaction_sessions.delete_many({})
     
     print(f"Deleted: {chars_deleted.deleted_count} characters, "
           f"{rels_deleted.deleted_count} relationships, "
-          f"{spaces_deleted.deleted_count} spaces, "
-          f"{interactions_deleted.deleted_count} interactions")
+          f"{sessions_deleted.deleted_count} sessions")
     
     # Insert characters
     print("\n=== Inserting characters ===")
@@ -90,50 +88,68 @@ async def load_characters_to_mongo():
     
     print(f"Inserted {len(inserted_ids)} characters")
     
-    # Create relationships
+    # Create relationships (bidirectional)
     print("\n=== Creating relationships ===")
     
     relationships_to_insert = []
     character_relationship_map = {}  # Track which characters each character knows
+    processed_pairs = set()  # Track which pairs we've processed
     
     for i, char in enumerate(characters):
-        from_char_id = str(inserted_ids[i])
-        from_char_name = char["name"]
+        char_id = str(inserted_ids[i])
+        char_name = char["name"]
         
-        if from_char_id not in character_relationship_map:
-            character_relationship_map[from_char_id] = []
+        if char_id not in character_relationship_map:
+            character_relationship_map[char_id] = []
         
         for rel in char.get("relationships", []):
             target_name = rel["target_name"]
             
             # Find target character ID
             if target_name not in name_to_id:
-                print(f"Warning: Relationship target '{target_name}' not found for {from_char_name}")
+                print(f"Warning: Relationship target '{target_name}' not found for {char_name}")
                 continue
             
-            to_char_id = name_to_id[target_name]
+            target_id = name_to_id[target_name]
             
-            # Check if this exact directional relationship already exists
-            existing = any(
-                r["from_character_id"] == from_char_id and r["to_character_id"] == to_char_id
-                for r in relationships_to_insert
-            )
+            # Create pair key (sorted to avoid duplicates)
+            pair_key = tuple(sorted([char_id, target_id]))
             
-            if not existing:
+            if pair_key not in processed_pairs:
+                processed_pairs.add(pair_key)
+                
+                # Find the reverse relationship if it exists
+                target_char = next((c for c in characters if c["name"] == target_name), None)
+                reverse_rel = None
+                if target_char:
+                    reverse_rel = next((r for r in target_char.get("relationships", []) if r.get("target_name") == char_name), None)
+                
+                # Create bidirectional relationship
                 relationship_doc = {
-                    "from_character_id": from_char_id,
-                    "to_character_id": to_char_id,
-                    "relationship_type": rel.get("relationship_type", "Friend"),
-                    "relationship_summary": rel.get("relationship_summary", ""),
-                    "relationship_score": rel.get("relationship_score", 50),
-                    "interaction_history": [],
+                    "character_id_1": char_id,
+                    "character_id_2": target_id,
+                    
+                    # Char1's perspective (current character)
+                    "char1_relationship_type": rel.get("relationship_type", "Acquaintance"),
+                    "char1_summary": rel.get("relationship_summary", ""),
+                    "char1_score": rel.get("relationship_score", 50),
+                    "char1_interaction_history": [],
+                    
+                    # Char2's perspective (target character)
+                    "char2_relationship_type": reverse_rel.get("relationship_type", "Acquaintance") if reverse_rel else "Acquaintance",
+                    "char2_summary": reverse_rel.get("relationship_summary", "") if reverse_rel else "",
+                    "char2_score": reverse_rel.get("relationship_score", 50) if reverse_rel else 50,
+                    "char2_interaction_history": [],
+                    
                     "current_interaction_state": "none"
                 }
                 relationships_to_insert.append(relationship_doc)
                 
-                # Track that from_char knows to_char
-                if to_char_id not in character_relationship_map[from_char_id]:
-                    character_relationship_map[from_char_id].append(to_char_id)
+                # Track relationships for both characters
+                if target_id not in character_relationship_map.get(char_id, []):
+                    character_relationship_map.setdefault(char_id, []).append(target_id)
+                if char_id not in character_relationship_map.get(target_id, []):
+                    character_relationship_map.setdefault(target_id, []).append(char_id)
     
     if relationships_to_insert:
         rel_result = await db.relationships.insert_many(relationships_to_insert)
