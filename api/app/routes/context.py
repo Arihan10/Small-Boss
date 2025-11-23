@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, status
-from typing import List
+from typing import List, Optional
 from bson import ObjectId
 from app.database import get_database
 from app.services.llm_service import get_llm_service
