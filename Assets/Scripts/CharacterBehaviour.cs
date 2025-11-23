@@ -8,18 +8,22 @@ public class CharacterBehaviour : MonoBehaviour
     // NavMeshAgent on the same GameObject (required)
     private NavMeshAgent agent;
 
-    // whether the character is currently moving to a destination
-    private bool isMoving = false;
+    // whether the character is currently walking to a destination
+    private bool isWalking = false;
 
     // Optional callback when destination is reached
     public event Action OnReachedDestination;
 
     // Public read-only accessor
-    public bool IsMoving => isMoving;
+    public bool IsWalking => isWalking;
+
+    // Optional Animator on the same GameObject. If present, we will set its "isMoving" bool parameter.
+    private Animator animator;
 
     void Awake()
     {
-        agent = GetComponent<NavMeshAgent>();
+    agent = GetComponent<NavMeshAgent>();
+    animator = GetComponent<Animator>();
     }
 
     /// <summary>
@@ -39,7 +43,11 @@ public class CharacterBehaviour : MonoBehaviour
         }
 
         agent.SetDestination(target);
-        isMoving = true;
+        isWalking = true;
+
+        // Keep Animator's parameter in sync if an Animator exists. Note: the Animator parameter
+        // is expected to be named "isMoving" in the Animator Controller (left as-is for compatibility).
+        animator?.SetBool("isMoving", true);
     }
 
     /// <summary>
@@ -52,20 +60,22 @@ public class CharacterBehaviour : MonoBehaviour
             agent.ResetPath();
         }
 
-        isMoving = false;
+        isWalking = false;
+        animator?.SetBool("isMoving", false);
     }
 
     void Update()
     {
         // Simple arrival detection: when a path is not pending and remainingDistance <= stoppingDistance
-        if (isMoving && agent != null && !agent.pathPending)
+        if (isWalking && agent != null && !agent.pathPending)
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
                 // when agent has no path or has effectively stopped moving
                 if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
                 {
-                    isMoving = false;
+                    isWalking = false;
+                    animator?.SetBool("isMoving", false);
                     OnReachedDestination?.Invoke();
                 }
             }
