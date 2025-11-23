@@ -15,7 +15,8 @@ public class Billboard : MonoBehaviour
 
     void Update()
     {
-        // Make the canvas look at the camera's position
-        transform.LookAt(cameraTransform);
+        // Make the canvas look at the camera, but align the up vector with the camera's up vector
+        // This keeps the text horizontal relative to the camera's view
+        transform.LookAt(transform.position + cameraTransform.rotation * Vector3.forward, cameraTransform.rotation * Vector3.up);
     }
 }
