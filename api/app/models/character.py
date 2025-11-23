@@ -49,6 +49,13 @@ class MemoryLogEntry(BaseModel):
     emotional_impact: Optional[str] = None
 
 
+class Position(BaseModel):
+    """Character position in Unity world space."""
+    
+    x: float = Field(default=0.0)
+    y: float = Field(default=0.0)
+
+
 class Needs(BaseModel):
     """Character needs on 0-100 scales."""
     
@@ -78,6 +85,9 @@ class Character(BaseModel):
     
     # Needs/Status
     needs: Needs = Field(default_factory=Needs)
+    
+    # Position (Unity world space - managed by Unity, saved here on shutdown)
+    position: Position = Field(default_factory=Position)
     
     # Current state
     current_desire: Optional[str] = None
@@ -139,6 +149,7 @@ class CharacterUpdate(BaseModel):
     
     personality_traits: Optional[List[str]] = None
     needs: Optional[Needs] = None
+    position: Optional[Position] = None
     current_desire: Optional[str] = None
 
 

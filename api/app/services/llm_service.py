@@ -49,6 +49,8 @@ class LLMService:
         context_parts.append(f"- Happiness: {needs.get('happiness', 50)}/100")
         context_parts.append(f"- Energy: {needs.get('energy', 50)}/100")
         context_parts.append(f"- Hunger: {needs.get('hunger', 50)}/100")
+        context_parts.append(f"- Anger: {needs.get('anger', 50)}/100")
+        context_parts.append(f"- Sadness: {needs.get('sadness', 50)}/100")
         
         if character.get('current_desire'):
             context_parts.append(f"- Current desire: {character['current_desire']}")
@@ -140,17 +142,24 @@ IMPORTANT:
 
 Respond ONLY with what {character['name']} would say (no quotes, no labels, just the dialogue):"""
 
-        # Call Cerebras
-        response = await asyncio.to_thread(
-            lambda: self.client.chat.completions.create(
-                model=self.model,
-                max_tokens=300,
-                messages=[{
-                    "role": "user",
-                    "content": prompt
-                }]
+        # Call Cerebras with timeout
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    lambda: self.client.chat.completions.create(
+                        model=self.model,
+                        max_tokens=300,
+                        messages=[{
+                            "role": "user",
+                            "content": prompt
+                        }]
+                    )
+                ),
+                timeout=30.0  # 30 second timeout
             )
-        )
+        except asyncio.TimeoutError:
+            print(f"⚠️ LLM timeout for dialogue generation")
+            return "..."  # Fallback response
         
         return response.choices[0].message.content.strip()
     
@@ -182,6 +191,8 @@ Respond ONLY with what {character['name']} would say (no quotes, no labels, just
         context_parts.append(f"Current mood/state:")
         context_parts.append(f"- Happiness: {needs.get('happiness', 50)}/100")
         context_parts.append(f"- Energy: {needs.get('energy', 50)}/100")
+        context_parts.append(f"- Anger: {needs.get('anger', 50)}/100")
+        context_parts.append(f"- Sadness: {needs.get('sadness', 50)}/100")
         
         if character.get('current_desire'):
             context_parts.append(f"- Current desire: {character['current_desire']}")
@@ -214,16 +225,23 @@ GOOD (concise): "resting on the bench 🪑💭"
 
 Generate the flavor text:"""
 
-        response = await asyncio.to_thread(
-            lambda: self.client.chat.completions.create(
-                model=self.model,
-                max_tokens=50,  # Reduced for shorter responses
-                messages=[{
-                    "role": "user",
-                    "content": prompt
-                }]
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    lambda: self.client.chat.completions.create(
+                        model=self.model,
+                        max_tokens=50,  # Reduced for shorter responses
+                        messages=[{
+                            "role": "user",
+                            "content": prompt
+                        }]
+                    )
+                ),
+                timeout=20.0  # 20 second timeout
             )
-        )
+        except asyncio.TimeoutError:
+            print(f"⚠️ LLM timeout for object interaction")
+            return "interacting..."  # Fallback
         
         return response.choices[0].message.content.strip()
     
@@ -289,36 +307,26 @@ Characters present and their current states:
 {context}
 {prev_desc_context}
 
-Generate a FACTUAL, LITERAL description of what each person is doing OR wanting to do.
-
-🚨 CRITICAL: If someone "wants to" do something social (talk, confront, etc.), they are NOT currently doing it yet!
-
-RULES:
-- If someone "wants to" do something social → say "wants to" or "is looking to"
-- If someone "recently" did a SOLO action (organized, worked, read) → say "is [doing that]" 
-- If someone has NO desire and NO recent action → say "is present" or omit them
-- Be concise and factual
-- NO creative storytelling
-- DO NOT make conversations sound active when they haven't started
-
-Examples:
-- Marcus (wants to: talk to Isabella) → "Marcus is looking for a chance to talk to Isabella."
-- Aldric (wants to: confront Elena about discipline) → "Aldric wants to speak with Elena about her responsibilities."
-- Isabella (recently: organizing inventory) → "Isabella is organizing inventory."
-- Thomas → "Thomas is present."
-
+Generate a FACTUAL, LITERAL description of what each person is doing OR wanting to do. You will be called frequently, if nothing has changed, return the exact same string, keep changes minimal and to a minimum.
 Generate ONLY literal description:"""
 
-        response = await asyncio.to_thread(
-            lambda: self.client.chat.completions.create(
-                model=self.model,
-                max_tokens=150,
-                messages=[{
-                    "role": "user",
-                    "content": prompt
-                }]
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    lambda: self.client.chat.completions.create(
+                        model=self.model,
+                        max_tokens=150,
+                        messages=[{
+                            "role": "user",
+                            "content": prompt
+                        }]
+                    )
+                ),
+                timeout=20.0  # 20 second timeout
             )
-        )
+        except asyncio.TimeoutError:
+            print(f"⚠️ LLM timeout for space context generation")
+            return ""  # Return empty description on timeout
         
         result = response.choices[0].message.content.strip()
         
@@ -363,6 +371,8 @@ Generate ONLY literal description:"""
         context_parts.append(f"- Energy: {needs.get('energy', 50)}/100")
         context_parts.append(f"- Hunger: {needs.get('hunger', 50)}/100")
         context_parts.append(f"- Hygiene: {needs.get('hygiene', 50)}/100")
+        context_parts.append(f"- Anger: {needs.get('anger', 50)}/100")
+        context_parts.append(f"- Sadness: {needs.get('sadness', 50)}/100")
         
         if character.get('current_desire'):
             context_parts.append(f"- Current desire: {character['current_desire']}")
@@ -487,7 +497,7 @@ ACTION OPTIONS (End Conversation):
    props: {{}}
    
 3. move - Leave to go somewhere
-   props: {{"destination": "location name"}}
+   props: {{"destination": "location name", "destination_type": "place/object/person"}}
    
 4. use_object - Leave to do something else
    props: {{"object_name": "object"}}
@@ -495,347 +505,78 @@ ACTION OPTIONS (End Conversation):
 IMPORTANT:
 - Keep conversations SHORT (3-5 exchanges)
 - After {msg_count} messages, consider if you've said what you needed
-- People have other things to do - don't monopolize their time
 - If conversation feels complete, choose leave/move/use_object
 - If you still have something important to say, speak briefly
 
 Respond in this EXACT format:
 
 ACTION_TYPE: [speak_in_conversation, fight_in_conversation, romance_in_conversation, leave_conversation, move, or use_object]
-PROPS: {{"dialogue": "..."}} OR {{"action": "punch/kiss/flirt/etc", "target_character": "name"}} OR {{"destination": "..."}} OR {{}}
+PROPS: {{"dialogue": "...", "target_character": "name"}} OR {{"action": "punch/kiss/flirt/etc", "target_character": "name"}} OR {{"destination": "...", "destination_type": "place/object/person"}} OR {{}}
 DESIRE: [updated desire]
 REASONING: [one sentence]
 STATE_CHANGES:
 current_desire: [your desire]
-happiness: [0-100]
-
-Example (dialogue):
-ACTION_TYPE: speak_in_conversation
-PROPS: {{"dialogue": "I understand. Take care!", "target_character": "Elena Thornwell"}}
-DESIRE: wrap up conversation
-REASONING: Said what I needed
-STATE_CHANGES:
-current_desire: wrap up conversation
-happiness: 68
-
-Example (fight):
-ACTION_TYPE: fight_in_conversation
-PROPS: {{"action": "punch", "target_character": "Rival Name"}}
-DESIRE: defend my honor
-REASONING: He insulted my family, I must respond
-STATE_CHANGES:
-current_desire: defend my honor
-happiness: 55
-
-Example (romance):
-ACTION_TYPE: romance_in_conversation
-PROPS: {{"action": "kiss", "target_character": "Isabella Cortez"}}
-DESIRE: express my feelings
-REASONING: The moment feels right to show my feelings
-STATE_CHANGES:
-current_desire: express my feelings
-happiness: 85"""
+happiness: [0-100]"""
         
         else:
             # Regular decision prompt (not in conversation)
             prompt = f"""{context}
 
-🚨🚨🚨 STEP 1: CHECK YOUR MOST RECENT ACTION FIRST! 🚨🚨🚨
+⚠️ NOTE: This is called on every Unity change (like useEffect). You'll be called frequently - it's OK to do nothing most of the time.
 
-BEFORE deciding what to do, look at your "Recent Actions" section above and answer:
+IMPORTANT, CRITICAL, DO NOT IGNORE. MOST OF THE TIME YOU SHOULD DO NOTHING, RETURNING NONE/NULL AS THE ACTION_TYPE AND NONE/NULL AS THE PROPS
 
-WHAT WAS MY LAST ACTION?
-- If it says "decided: move to Elena Thornwell" → I'm ALREADY at Elena! DON'T move to her again!
-- If it says "decided: move to anvil" → I'm ALREADY at the anvil! DON'T move again! USE it!
-- If it says "decided: move to Town Square" → I'm AT Town Square! Now I can move to a person/object there!
-- If it says "use_object anvil" → I'm still at the anvil! I can use it again!
+Check your LAST ACTIONS first:
+- "decided: move to X" → You're AT X now (interact with it or stay)
+- "use_object X" → Still at X (continue using or move away)
+- Otherwise → You can move or start something new
 
-WHERE AM I RIGHT NOW? (Check "Recent Actions"):
-- Last action was "move to [place/person/object]" → I'm AT that place/person/object
-- Last action was "use_object [thing]" → I'm still at that thing
-- Last action was "wait" or "continue" → I haven't moved recently
+ACTIONS:
+1. move - Go to location/object/person: {{"destination": "name", "destination_type": "place/object/person"}}
+2. initiate_conversation - Talk: {{"target_character": "name", "interaction_type": "dialog/fight/romance"}}
+3. use_object - Use object: {{"object_name": "name"}}
+4. wait - Do nothing
 
-🚨 CRITICAL RULE: If your LAST action was moving to a target, DO NOT move to the same target again!
+RULES:
+- After "move to X", don't move to X again - interact instead
+- "continue" is for solo activities only (not conversations)
+- If content with current state, do nothing
 
-Example of what NOT to do:
-❌ Last action: "decided: move to Elena" → Choose: move to "Elena" ← WRONG! You're already there!
-✅ Last action: "decided: move to Elena" → Choose: initiate_conversation ← CORRECT!
+YOU MUST MOVE TO AN OBJECT, CHARACTER, OR LOCATION FIRST BEFORE YOU CAN INTERACT WITH IT OR START A CONVERSATION, SEE ACTION HISTORY FOR DETAILS.
 
-Now, based on your recent action and everything above, decide what ACTION to take next.
-
-⏰ AVOID REPETITION: Check your "Recent interactions" - if you JUST talked to someone, don't immediately start the same conversation again!
-
-Movement can be multi-step:
-✅ move to "Town Square" → move to "Elena Thornwell" → initiate_conversation
-✅ move to "Blackwood Forge" → move to "anvil" → use_object
-❌ DON'T move to the same target twice in a row!
-
-Based on everything above, decide what ACTION to take next and how your state changes.
-
-ACTION OPTIONS:
-1. move - Navigate to a location, object, or person
-   props: {{"destination": "location name OR object name OR character name"}}
-   
-   🛑 BEFORE choosing this, check Recent Actions:
-   - If last action was "decided: move to [X]" → DON'T move to [X] again!
-   - Only move if going to a DIFFERENT target than your last move
-   
-   Examples: 
-   - {{"destination": "Blackwood Forge"}} - navigate to a location
-   - {{"destination": "anvil"}} - navigate to an object
-   - {{"destination": "Elena Thornwell"}} - navigate to a person
-   
-2. initiate_conversation - Start talking to someone
-   props: {{"target_character": "exact character name", "interaction_type": "dialog/fight/romance"}}
-   
-   🛑 REQUIREMENTS - Check Recent Actions:
-   - Your LAST action MUST be "decided: move to [person name]" OR "decided: move to [their location]"
-   - If last action was NOT a move to them → Choose "move" first!
-   - If last action WAS a move to them → NOW you can talk!
-   
-3. use_object - Interact with an object
-   props: {{"object_name": "exact object name"}}
-   
-   🛑 REQUIREMENTS - Check Recent Actions:
-   - Your LAST action MUST be "decided: move to [object]" OR "use_object [object]"
-   - If last action was "decided: move to anvil" → USE it now, don't move again!
-   - If last action was "use_object anvil" → Use it again (you're still there!)
-   - If last action was NOT either of these → Move to it first!
-   
-4. wait - Stay and observe (do nothing this turn, think, relax)
-   props: {{}}
-   
-5. continue - Keep doing current SOLO activity (reading, working, crafting, etc.)
-   props: {{}}
-   ⚠️ Use this when you're continuing work at an object you're already using
-   ⚠️ Alternative: you can also use "use_object" again if you just used it
-   ⚠️ NEVER use this for social interactions!
-
-🚨 CRITICAL RULES - READ CAREFULLY:
-
-1. YOU ARE NOT IN A CONVERSATION RIGHT NOW:
-   - Just because someone is nearby doesn't mean you're talking to them
-   - If you want to talk to someone, you MUST choose "initiate_conversation"
-   - "continue" is ONLY for SOLO activities (working, reading, crafting, etc.)
-   - Don't assume conversations are happening - you must START them explicitly!
-
-2. WHEN TO MOVE BEFORE INTERACTING:
-   Movement can be one OR two steps:
-   
-   - To use an object (ONE step):
-     * Move directly to object: move to "anvil" → use_object "anvil"
-   
-   - To use an object (TWO steps):
-     * Move to location: move to "Blackwood Forge"
-     * Move to object: move to "anvil"
-     * Then use it: use_object "anvil"
-   
-   - To talk to someone (ONE step):
-     * Move directly to person: move to "Elena Thornwell" → initiate_conversation
-   
-   - To talk to someone (TWO steps):
-     * Move to location: move to "The Inn"
-     * Move to person: move to "Elena Thornwell"
-     * Then talk: initiate_conversation
-   
-   - When you just used an object:
-     * If last action was "use_object anvil" → You're still there! Use it again or do something else!
-
-3. CHECK YOUR RECENT ACTIONS - READ THIS LINE BY LINE:
-   
-   Step 1: Look at the LAST entry in "Recent Actions" above
-   Step 2: What does it say?
-   
-   If it says "decided: move to anvil":
-     → You are AT the anvil right now
-     → Next action should be: use_object "anvil"
-     → DO NOT choose: move to "anvil" again!
-   
-   If it says "decided: move to Elena Thornwell":
-     → You are AT Elena right now
-     → Next action should be: initiate_conversation with Elena
-     → DO NOT choose: move to "Elena Thornwell" again!
-   
-   If it says "decided: move to Town Square":
-     → You are AT Town Square right now
-     → Next action could be: move to "Elena" or "anvil" in that space, or wait, or continue
-     → DO NOT choose: move to "Town Square" again!
-   
-   If it says "use_object anvil":
-     → You are still AT the anvil
-     → Next action could be: use_object "anvil" again, or move somewhere else
-     → DO NOT choose: move to "anvil" again!
-   
-   Examples:
-   
-   PATTERN 1 - Direct to object/person:
-   - Turn 1: move {{"destination": "anvil"}}
-   - Turn 2: use_object "anvil"
-   - Turn 3: use_object "anvil" (keep working)
-   
-   PATTERN 2 - Location first, then object/person:
-   - Turn 1: move {{"destination": "Blackwood Forge"}}
-   - Turn 2: move {{"destination": "anvil"}} (approaching anvil in the forge)
-   - Turn 3: use_object "anvil"
-   - Turn 4: use_object "anvil" (keep working)
-   
-   PATTERN 3 - Location first, then person:
-   - Turn 1: move {{"destination": "The Inn"}}
-   - Turn 2: move {{"destination": "Elena Thornwell"}} (approaching Elena in the inn)
-   - Turn 3: initiate_conversation with Elena
-   
-   AVOID THIS LOOP:
-   ❌ move to "anvil" → move to "anvil" again (same target!)
-   ❌ move to "anvil" → move to "Blackwood Forge" → move to "anvil" (back and forth!)
-   
-   TALKING TO PEOPLE:
-   - Want to talk to Elena at the Inn, last action was "waited":
-     * Turn 1: move {{"destination": "The Sleeping Dragon Inn"}}
-     * Turn 2: initiate_conversation with Elena
-
-4. LOCATION AND OBJECT AWARENESS:
-   - Your visible spaces show WHERE objects and people are
-   - You can navigate to a LOCATION (e.g., "Blackwood Forge")
-   - You can navigate to an OBJECT directly (e.g., "anvil", "bar_counter")
-   - Always check your recent actions before using objects or talking to people
-
-5. EXAMPLES - BAD vs GOOD:
-   
-   🚨 THE #1 MISTAKE - MOVING TO SAME TARGET REPEATEDLY:
-   
-   Scenario: Aldric wants to talk to Elena
-   
-   ❌ WRONG PATTERN (Infinite loop):
-   Turn 1: Recent Actions: "waited" → Choose: move to "Elena Thornwell"
-   Turn 2: Recent Actions: "decided: move to Elena Thornwell" → Choose: move to "Elena Thornwell" ← STOP! You're there!
-   Turn 3: Recent Actions: "decided: move to Elena Thornwell" → Choose: move to "Elena Thornwell" ← Still wrong!
-   
-   ✅ CORRECT PATTERN:
-   Turn 1: Recent Actions: "waited" → Choose: move to "Elena Thornwell"
-   Turn 2: Recent Actions: "decided: move to Elena Thornwell" → Choose: initiate_conversation with Elena ← NOW talk!
-   
-   ANOTHER COMMON MISTAKE:
-   ❌ BAD: Recent Actions: "decided: move anvil" → choose "move to anvil" (NO! You're there!)
-   ✅ GOOD: Recent Actions: "decided: move anvil" → choose "use_object anvil"
-   
-   TWO-STEP APPROACH (Location → Object):
-   ✅ GOOD: Turn 1: move to "Blackwood Forge"
-   ✅ GOOD: Turn 2: move to "anvil" (approaching anvil in the forge)
-   ✅ GOOD: Turn 3: use_object "anvil"
-   
-   TWO-STEP APPROACH (Location → Person):
-   ✅ GOOD: Turn 1: move to "The Inn"
-   ✅ GOOD: Turn 2: move to "Elena Thornwell" (approaching Elena in the inn)
-   ✅ GOOD: Turn 3: initiate_conversation with Elena
-   
-   ONE-STEP DIRECT APPROACH:
-   ✅ GOOD: Turn 1: move to "anvil" (going straight to anvil)
-   ✅ GOOD: Turn 2: use_object "anvil"
-   
-   USING OBJECTS REPEATEDLY:
-   ✅ GOOD: Last action was "use_object anvil" → choose "use_object anvil" again
-   ✅ GOOD: Last action was "use_object anvil" → choose "continue"
-   ❌ BAD: Last action was "use_object anvil" → choose "move to anvil" (you're there!)
-   
-   TALKING TO PEOPLE:
-   ❌ BAD: Haven't moved yet → choose "initiate_conversation"
-   ✅ GOOD: Haven't moved yet → choose "move" to location or person first
-   ✅ GOOD: Just moved to person/location → NOW "initiate_conversation"
-
-Respond in this EXACT format:
-
-LAST_ACTION_WAS: [What was your most recent action from Recent Actions? e.g., "decided: move to Elena Thornwell"]
-WHERE_I_AM_NOW: [Based on last action, where are you? e.g., "At Elena Thornwell" or "At Town Square"]
-ACTION_TYPE: [choose one: move, initiate_conversation, use_object, wait, continue]
-PROPS: {{"key": "value"}}
-DESIRE: [new desire/intention - what you want overall]
-REASONING: [one sentence why, referencing your last action]
+FORMAT:
+LAST_ACTION_WAS: [your last action]
+ACTION_TYPE: [move/initiate_conversation/use_object/wait]
+PROPS: {{...}}
+DESIRE: [what you want]
+REASONING: [why]
 STATE_CHANGES:
-current_desire: [from DESIRE above]
-happiness: [0-100, change only if mood shifts]
-energy: [0-100, change only if tired/energized]
+current_desire: [desire]
+happiness: [0-100]
+energy: [0-100]"""
 
-Example - TWO-STEP object interaction (location first, then object):
-
-Turn 1:
-LAST_ACTION_WAS: waited
-WHERE_I_AM_NOW: Somewhere else
-ACTION_TYPE: move
-PROPS: {{"destination": "Blackwood Forge"}}
-DESIRE: work at the forge
-REASONING: Not at the forge yet, moving there first
-STATE_CHANGES:
-current_desire: work at the forge
-happiness: 55
-
-Turn 2:
-LAST_ACTION_WAS: decided: move to Blackwood Forge
-WHERE_I_AM_NOW: At Blackwood Forge
-ACTION_TYPE: move
-PROPS: {{"destination": "anvil"}}
-DESIRE: work at the forge
-REASONING: Now at the forge, approaching the anvil
-STATE_CHANGES:
-current_desire: work at the forge
-happiness: 56
-
-Turn 3:
-LAST_ACTION_WAS: decided: move to anvil
-WHERE_I_AM_NOW: At the anvil
-ACTION_TYPE: use_object
-PROPS: {{"object_name": "anvil"}}
-DESIRE: work at the forge
-REASONING: Just moved to anvil, now using it
-STATE_CHANGES:
-current_desire: work at the forge
-happiness: 60
-energy: 58
-
-Example - TWO-STEP conversation (location first, then person):
-
-Turn 1:
-LAST_ACTION_WAS: waited
-WHERE_I_AM_NOW: Town Square
-ACTION_TYPE: move
-PROPS: {{"destination": "The Sleeping Dragon Inn"}}
-DESIRE: talk to Isabella
-REASONING: Not at the Inn yet, moving there first
-STATE_CHANGES:
-current_desire: talk to Isabella
-happiness: 55
-
-Turn 2:
-LAST_ACTION_WAS: decided: move to The Sleeping Dragon Inn
-WHERE_I_AM_NOW: At The Sleeping Dragon Inn
-ACTION_TYPE: move
-PROPS: {{"destination": "Isabella Cortez"}}
-DESIRE: talk to Isabella
-REASONING: Now at the Inn, approaching Isabella
-STATE_CHANGES:
-current_desire: talk to Isabella
-happiness: 57
-
-Turn 3:
-LAST_ACTION_WAS: decided: move to Isabella Cortez
-WHERE_I_AM_NOW: At Isabella Cortez
-ACTION_TYPE: initiate_conversation
-PROPS: {{"target_character": "Isabella Cortez", "interaction_type": "dialog"}}
-DESIRE: talk to Isabella
-REASONING: Just moved to Isabella, now starting conversation
-STATE_CHANGES:
-current_desire: talk to Isabella
-happiness: 60"""
-
-        response = await asyncio.to_thread(
-            lambda: self.client.chat.completions.create(
-                model=self.model,
-                max_tokens=400,
-                messages=[{
-                    "role": "user",
-                    "content": prompt
-                }]
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    lambda: self.client.chat.completions.create(
+                        model=self.model,
+                        max_tokens=400,
+                        messages=[{
+                            "role": "user",
+                            "content": prompt
+                        }]
+                    )
+                ),
+                timeout=30.0  # 30 second timeout
             )
-        )
+        except asyncio.TimeoutError:
+            print(f"⚠️ LLM timeout for decision generation")
+            # Return a safe "wait" action on timeout
+            return {
+                "action": {"actionType": "wait", "props": {}},
+                "state_changes": [],
+                "reasoning": "LLM request timed out"
+            }
         
         text = response.choices[0].message.content
         
@@ -887,7 +628,7 @@ happiness: 60"""
                 value = value.strip()
                 
                 # Try to parse as int if it's a number
-                if key in ['happiness', 'energy', 'hunger', 'hygiene']:
+                if key in ['happiness', 'energy', 'hunger', 'hygiene', 'anger', 'sadness']:
                     # Force convert to int for numeric fields
                     try:
                         value = int(value)
@@ -949,6 +690,8 @@ happiness: 60"""
         context_parts.append(f"- Energy: {needs.get('energy', 50)}/100")
         context_parts.append(f"- Hunger: {needs.get('hunger', 50)}/100")
         context_parts.append(f"- Hygiene: {needs.get('hygiene', 50)}/100")
+        context_parts.append(f"- Anger: {needs.get('anger', 50)}/100")
+        context_parts.append(f"- Sadness: {needs.get('sadness', 50)}/100")
         
         if character.get('current_desire'):
             context_parts.append(f"- Current desire: {character['current_desire']}")
@@ -1110,7 +853,7 @@ energy: {needs.get('energy', 50)}"""
                 value = value.strip()
                 
                 # Try to parse as int if it's a number
-                if key in ['happiness', 'energy', 'hunger', 'hygiene']:
+                if key in ['happiness', 'energy', 'hunger', 'hygiene', 'anger', 'sadness']:
                     # Force convert to int for numeric fields
                     try:
                         value = int(value)
@@ -1198,16 +941,27 @@ IMPORTANT:
 - Neutral interactions: -1 to +2
 - Negative interactions: -10 to -2"""
 
-        response = await asyncio.to_thread(
-            lambda: self.client.chat.completions.create(
-                model=self.model,
-                max_tokens=800,
-                messages=[{
-                    "role": "user",
-                    "content": prompt
-                }]
+        try:
+            response = await asyncio.wait_for(
+                asyncio.to_thread(
+                    lambda: self.client.chat.completions.create(
+                        model=self.model,
+                        max_tokens=800,
+                        messages=[{
+                            "role": "user",
+                            "content": prompt
+                        }]
+                    )
+                ),
+                timeout=30.0  # 30 second timeout
             )
-        )
+        except asyncio.TimeoutError:
+            print(f"⚠️ LLM timeout for interaction summary")
+            return {
+                "summary": f"Had a {interaction_type} conversation",
+                "emotional_impacts": {},
+                "relationship_changes": {}
+            }
         
         text = response.choices[0].message.content
         
@@ -1275,4 +1029,3 @@ def get_llm_service() -> LLMService:
     if _llm_service is None:
         _llm_service = LLMService()
     return _llm_service
-

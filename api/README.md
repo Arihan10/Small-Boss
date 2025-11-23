@@ -94,6 +94,39 @@ Character interacts with object, returns AI-generated emoji flavor text
 
 **Unity Use:** Display as subtitle above character
 
+#### Save All Character Positions
+```
+POST /characters/save-positions
+```
+Save positions for all characters (Unity calls this on shutdown)
+
+**Request:**
+```json
+{
+  "positions": [
+    {
+      "character_id": "marcus_id",
+      "position": {"x": 10.5, "y": 3.2}
+    },
+    {
+      "character_id": "isabella_id",
+      "position": {"x": -5.3, "y": 8.1}
+    }
+  ]
+}
+```
+
+**Response:**
+```json
+{
+  "updated_count": 2,
+  "failed_count": 0,
+  "message": "Updated 2/2 character positions successfully"
+}
+```
+
+**Unity Use:** Call on game shutdown to persist all character positions
+
 #### Make Decision (.decide)
 ```
 POST /characters/{character_id}/decide
@@ -140,7 +173,7 @@ AI decides what character should do next based on full context
 ```
 
 **Action Types:**
-- `move` - props: `{destination: "space_name"}`
+- `move` - props: `{destination: "space_name", destination_type: "place/object/person"}`
 - `initiate_conversation` - props: `{target_character: "name", interaction_type: "dialog/fight/romance"}`
 - `use_object` - props: `{object_name: "fountain"}`
 - `wait` - props: `{}`
@@ -292,10 +325,36 @@ async void Start() {
     // Load all characters
     var characters = await GET("/characters");
     
-    // Instantiate character GameObjects
+    // Instantiate character GameObjects at saved positions
     foreach (var character in characters) {
-        InstantiateCharacter(character);
+        InstantiateCharacter(character, character.position);
     }
+}
+```
+
+### Game Shutdown (Save Positions)
+
+```csharp
+async void OnApplicationQuit() {
+    // Gather all character positions
+    var positions = new List<CharacterPosition>();
+    
+    foreach (var character in allCharacters) {
+        positions.Add(new CharacterPosition {
+            character_id = character.id,
+            position = new Position {
+                x = character.transform.position.x,
+                y = character.transform.position.y
+            }
+        });
+    }
+    
+    // Save all positions in one call
+    await POST("/characters/save-positions", new {
+        positions = positions
+    });
+    
+    Debug.Log("All character positions saved!");
 }
 ```
 
@@ -341,6 +400,7 @@ void ExecuteAction(Character character, Action action) {
     switch (action.actionType) {
         case "move":
             var destination = action.props["destination"];
+            var destinationType = action.props["destination_type"]; // "place", "object", or "person"
             character.MoveTo(FindLocation(destination));
             break;
             
@@ -431,6 +491,10 @@ IEnumerator ConversationLoop(string sessionId) {
     "shoes": 1,
     "bottom": 3,
     "top": 7
+  },
+  "position": {
+    "x": 0.0,
+    "y": 0.0
   },
   "needs": {
     "happiness": 55,
@@ -527,6 +591,7 @@ python load_to_mongo.py        # Loads into MongoDB
 |----------|--------|---------|
 | `/characters` | GET | Load all characters |
 | `/characters/{id}` | GET | Get character state |
+| `/characters/save-positions` | POST | Save all character positions |
 | `/characters/{id}/decide` | POST | AI decision-making |
 | `/characters/{id}/use/{object}` | POST | Object interaction |
 | `/relationships/character/{id}` | GET | Get relationships |
@@ -582,7 +647,7 @@ python load_to_mongo.py        # Loads into MongoDB
 1. Game starts → Unity loads Marcus from /characters
 2. Unity spawns Marcus at Residential District
 3. Unity calls Marcus.decide("character spawned")
-   → AI returns: {action: {actionType: "move", props: {destination: "Town Square"}}}
+   → AI returns: {action: {actionType: "move", props: {destination: "Town Square", destination_type: "place"}}}
 4. Unity moves Marcus to Town Square
 5. Unity calls /context/generate-space-context
    → AI returns: "Marcus is looking around. Isabella is at her stall."

@@ -11,7 +11,8 @@ from app.models.character import (
     DesireUpdate,
     ActionLogEntry,
     MemoryLogEntry,
-    Needs
+    Needs,
+    Position
 )
 from app.models.decision import (
     DecisionRequest,
@@ -243,7 +244,8 @@ async def decide(character_id: str, request: DecisionRequest):
 
     if action_type == "move":
         destination = props.get('destination', 'unknown')
-        action_description = f"move to {destination}"
+        destination_type = props.get('destination_type', 'unknown')
+        action_description = f"move to {destination} ({destination_type})"
         action_handled = True  # Move is handled here (memory log below)
         
     elif action_type == "initiate_conversation":
@@ -503,5 +505,78 @@ async def decide(character_id: str, request: DecisionRequest):
         action=ActionOutput(**action_obj),
         reasoning=decision_result.get("reasoning"),
         timestamp=datetime.utcnow()
+    )
+
+
+class CharacterPosition(BaseModel):
+    """Schema for a character's position."""
+    character_id: str
+    position: Position
+
+
+class SaveAllPositionsRequest(BaseModel):
+    """Schema for saving all character positions (called by Unity on shutdown)."""
+    positions: List[CharacterPosition]
+
+
+class SaveAllPositionsResponse(BaseModel):
+    """Response from saving all character positions."""
+    updated_count: int
+    failed_count: int
+    message: str
+
+
+@router.post("/save-positions", response_model=SaveAllPositionsResponse)
+async def save_all_positions(request: SaveAllPositionsRequest):
+    """
+    Save positions for all characters.
+    Unity calls this endpoint when shutting down to persist character positions.
+    
+    This allows Unity to manage all positions during runtime and only save them
+    when necessary (shutdown, checkpoint, etc.).
+    """
+    db = get_database()
+    updated_count = 0
+    failed_count = 0
+    
+    for char_pos in request.positions:
+        try:
+            # Validate character ID
+            if not ObjectId.is_valid(char_pos.character_id):
+                print(f"Warning: Invalid character ID format: {char_pos.character_id}")
+                failed_count += 1
+                continue
+            
+            # Update character position
+            result = await db.characters.update_one(
+                {"_id": ObjectId(char_pos.character_id)},
+                {"$set": {
+                    "position.x": char_pos.position.x,
+                    "position.y": char_pos.position.y
+                }}
+            )
+            
+            if result.modified_count > 0:
+                updated_count += 1
+            else:
+                # Character might not exist or position didn't change
+                character_exists = await db.characters.find_one({"_id": ObjectId(char_pos.character_id)})
+                if not character_exists:
+                    print(f"Warning: Character not found: {char_pos.character_id}")
+                    failed_count += 1
+                else:
+                    # Position didn't change, still count as success
+                    updated_count += 1
+                    
+        except Exception as e:
+            print(f"Error updating position for character {char_pos.character_id}: {str(e)}")
+            failed_count += 1
+    
+    total = updated_count + failed_count
+    
+    return SaveAllPositionsResponse(
+        updated_count=updated_count,
+        failed_count=failed_count,
+        message=f"Updated {updated_count}/{total} character positions successfully"
     )
 

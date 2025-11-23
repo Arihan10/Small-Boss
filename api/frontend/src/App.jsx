@@ -432,7 +432,8 @@ function App() {
 				...prev,
 				[character._id]: props.destination,
 			}));
-			addLog(`   🚶 ${character.name} → ${props.destination}`);
+			const typeInfo = props.destination_type ? ` (${props.destination_type})` : '';
+			addLog(`   🚶 ${character.name} → ${props.destination}${typeInfo}`);
 		} else if (
 			actionType === "initiate_conversation" &&
 			props.target_character
