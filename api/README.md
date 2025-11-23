@@ -540,7 +540,9 @@ IEnumerator ConversationLoop(string sessionId) {
     "happiness": 55,
     "energy": 80,
     "hunger": 70,
-    "hygiene": 50
+    "hygiene": 50,
+    "anger": 30,
+    "sadness": 40
   },
   "current_desire": "find Isabella and talk to her",
   "action_log": [...],

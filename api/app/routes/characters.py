@@ -205,7 +205,7 @@ async def decide(character_id: str, request: DecisionRequest):
             # Map keys to database fields
             if key == "current_desire" or key == "currentDesire":
                 update_data["current_desire"] = value
-            elif key in ["happiness", "energy", "hunger", "hygiene"]:
+            elif key in ["happiness", "energy", "hunger", "hygiene", "anger", "sadness"]:
                 # Convert to int if it's a string
                 try:
                     int_value = int(value) if isinstance(value, str) else value
@@ -216,7 +216,7 @@ async def decide(character_id: str, request: DecisionRequest):
             elif key.startswith("needs."):
                 # Direct needs update
                 need_key = key.replace("needs.", "")
-                if need_key in ["happiness", "energy", "hunger", "hygiene"]:
+                if need_key in ["happiness", "energy", "hunger", "hygiene", "anger", "sadness"]:
                     try:
                         int_value = int(value) if isinstance(value, str) else value
                         update_data[key] = max(0, min(100, int_value))

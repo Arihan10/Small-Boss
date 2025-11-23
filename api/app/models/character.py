@@ -63,6 +63,8 @@ class Needs(BaseModel):
     energy: int = Field(default=50, ge=0, le=100)
     hunger: int = Field(default=50, ge=0, le=100)
     hygiene: int = Field(default=50, ge=0, le=100)
+    anger: int = Field(default=50, ge=0, le=100)
+    sadness: int = Field(default=50, ge=0, le=100)
 
 
 class Character(BaseModel):
@@ -122,7 +124,9 @@ class Character(BaseModel):
                     "happiness": 70,
                     "energy": 60,
                     "hunger": 40,
-                    "hygiene": 80
+                    "hygiene": 80,
+                    "anger": 20,
+                    "sadness": 30
                 },
                 "current_desire": "Wants to grab coffee with a friend"
             }

@@ -213,7 +213,9 @@ For EACH character, create a JSON object with:
     "happiness": <0-100>,
     "energy": <0-100>,
     "hunger": <0-100>,
-    "hygiene": <0-100>
+    "hygiene": <0-100>,
+    "anger": <0-100>,
+    "sadness": <0-100>
   }}
 }}
 
