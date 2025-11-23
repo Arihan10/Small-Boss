@@ -6153,7 +6153,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6974521556414156316, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_Name
-      value: F_FullBody AllEquipments
+      value: Woman
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974521556414156317, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: a0f02f15d47c7914b9be968c4abffc59, type: 2}
+    - target: {fileID: 6974521556414156317, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6974521556434623926, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_RootOrder
@@ -6171,21 +6179,37 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6974521556805826568, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0018779055
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974521556805826568, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.026909016
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974521556805826595, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.16524568
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974521556805826595, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.0496892
+      objectReference: {fileID: 0}
     - target: {fileID: 6974521556805826603, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6974521556805826603, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.417
+      value: 32.84623
       objectReference: {fileID: 0}
     - target: {fileID: 6974521556805826603, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.4
+      value: 1.586
       objectReference: {fileID: 0}
     - target: {fileID: 6974521556805826603, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.059586287
+      value: 20.50584
       objectReference: {fileID: 0}
     - target: {fileID: 6974521556805826603, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -6390,6 +6414,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6974521556414156316, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
       insertIndex: -1
       addedObject: {fileID: 3684722084923869737}
+    - targetCorrespondingSourceObject: {fileID: 6974521556414156316, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6160656062554212588}
+    - targetCorrespondingSourceObject: {fileID: 6974521556414156316, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 901672978884249536}
   m_SourcePrefab: {fileID: 100100000, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
 --- !u!137 &2113643196319070022 stripped
 SkinnedMeshRenderer:
@@ -6881,6 +6911,40 @@ MonoBehaviour:
   currentShoes: 4
   currentHair: 3
   currentSkinColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!195 &6160656062554212588
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7083664222869434350}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.3
+  m_Speed: 3
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1.7
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &901672978884249536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7083664222869434350}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96a13bf8844e5224799b9cf391e51571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!137 &7083664222890982469 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 6974521556434623927, guid: be3f2b3e6e6cda444ab4b99e08a962b0, type: 3}
