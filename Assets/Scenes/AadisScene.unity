@@ -3665,7 +3665,7 @@ MonoBehaviour:
   m_OverrideTileSize: 0
   m_TileSize: 256
   m_OverrideVoxelSize: 0
-  m_VoxelSize: 0.16666667
+  m_VoxelSize: 0.1
   m_MinRegionArea: 2
   m_NavMeshData: {fileID: 0}
   m_BuildHeightMesh: 0
@@ -18503,10 +18503,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Woman
       objectReference: {fileID: 0}
-    - target: {fileID: 7083664222869434350, guid: b1b35c3e1dd286f4c8501965bf234629, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -29645,10 +29641,6 @@ PrefabInstance:
     - target: {fileID: 2759010393767463509, guid: 68581abecca990544938a0405ebac7b8, type: 3}
       propertyPath: m_Name
       value: Man
-      objectReference: {fileID: 0}
-    - target: {fileID: 2759010393767463509, guid: 68581abecca990544938a0405ebac7b8, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2759010394494837026, guid: 68581abecca990544938a0405ebac7b8, type: 3}
       propertyPath: m_LocalPosition.x

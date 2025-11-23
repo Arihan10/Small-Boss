@@ -103,4 +103,89 @@ public class CharacterBehaviour : MonoBehaviour
             }
         }
     }
+
+    /// <summary>
+    /// Sets the Interact animation state. Can loop while true.
+    /// If true, automatically stops all other action states (Fight, Talk, Kiss, Sex).
+    /// </summary>
+    /// <param name="isInteracting">True to start/continue interacting, false to stop and return to idle.</param>
+    public void Interact(bool isInteracting)
+    {
+        if (isInteracting)
+        {
+            animator?.SetBool("isFighting", false);
+            animator?.SetBool("isTalking", false);
+            animator?.SetBool("isKissing", false);
+            animator?.SetBool("isSexing", false);
+        }
+        animator?.SetBool("isInteracting", isInteracting);
+    }
+
+    /// <summary>
+    /// Sets the Fight animation state. Can loop while true.
+    /// If true, automatically stops all other action states (Interact, Talk, Kiss, Sex).
+    /// </summary>
+    /// <param name="isFighting">True to start/continue fighting, false to stop and return to idle.</param>
+    public void Fight(bool isFighting)
+    {
+        if (isFighting)
+        {
+            animator?.SetBool("isInteracting", false);
+            animator?.SetBool("isTalking", false);
+            animator?.SetBool("isKissing", false);
+            animator?.SetBool("isSexing", false);
+        }
+        animator?.SetBool("isFighting", isFighting);
+    }
+
+    /// <summary>
+    /// Sets the Talk animation state. Can loop while true.
+    /// If true, automatically stops all other action states (Interact, Fight, Kiss, Sex).
+    /// </summary>
+    /// <param name="isTalking">True to start/continue talking, false to stop and return to idle.</param>
+    public void Talk(bool isTalking)
+    {
+        if (isTalking)
+        {
+            animator?.SetBool("isInteracting", false);
+            animator?.SetBool("isFighting", false);
+            animator?.SetBool("isKissing", false);
+            animator?.SetBool("isSexing", false);
+        }
+        animator?.SetBool("isTalking", isTalking);
+    }
+
+    /// <summary>
+    /// Sets the Kiss animation state. Can loop while true.
+    /// If true, automatically stops all other action states (Interact, Fight, Talk, Sex).
+    /// </summary>
+    /// <param name="isKissing">True to start/continue kissing, false to stop and return to idle.</param>
+    public void Kiss(bool isKissing)
+    {
+        if (isKissing)
+        {
+            animator?.SetBool("isInteracting", false);
+            animator?.SetBool("isFighting", false);
+            animator?.SetBool("isTalking", false);
+            animator?.SetBool("isSexing", false);
+        }
+        animator?.SetBool("isKissing", isKissing);
+    }
+
+    /// <summary>
+    /// Sets the Sex animation state. Can loop while true.
+    /// If true, automatically stops all other action states (Interact, Fight, Talk, Kiss).
+    /// </summary>
+    /// <param name="isSexing">True to start/continue sex animation, false to stop and return to idle.</param>
+    public void Sex(bool isSexing)
+    {
+        if (isSexing)
+        {
+            animator?.SetBool("isInteracting", false);
+            animator?.SetBool("isFighting", false);
+            animator?.SetBool("isTalking", false);
+            animator?.SetBool("isKissing", false);
+        }
+        animator?.SetBool("isSexing", isSexing);
+    }
 }
